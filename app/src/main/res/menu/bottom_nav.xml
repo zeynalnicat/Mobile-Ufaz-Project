@@ -3,8 +3,14 @@
 
     <item
         android:id="@+id/searchFragment"
+        android:icon="@drawable/icon_search"
         android:title="Search" />
     <item
         android:id="@+id/playlistFragment"
+        android:icon="@drawable/icon_playlist"
         android:title="Playlist" />
+    <item
+        android:id="@+id/quizFragment"
+        android:icon="@drawable/icon_quiz"
+        android:title="Quiz" />
 </menu>

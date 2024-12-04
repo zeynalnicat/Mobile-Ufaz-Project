@@ -70,4 +70,8 @@ dependencies {
     // LiveData
     implementation (libs.androidx.lifecycle.livedata.ktx)
     ksp (libs.androidx.lifecycle.compiler)
+
+    // Glide
+    implementation (libs.glide)
+    annotationProcessor (libs.compiler)
 }

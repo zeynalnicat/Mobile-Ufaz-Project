@@ -1,12 +1,15 @@
 package com.example.finalprojectufaz
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.get
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
+import androidx.recyclerview.widget.RecyclerView
 import com.example.finalprojectufaz.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -21,8 +24,18 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        val navHostFragment =
-       supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
-        NavigationUI.setupWithNavController(binding.bottomAppBar, navHostFragment.navController)
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+        NavigationUI.setupWithNavController(binding.bottomNav, navHostFragment.navController)
+
+
     }
-}
+
+    fun hideBottomNav(hide:Boolean){
+        if(hide){
+            binding.bottomNav.visibility = View.GONE
+        }else{
+            binding.bottomNav.visibility = View.VISIBLE
+        }
+    }
+
+    }
