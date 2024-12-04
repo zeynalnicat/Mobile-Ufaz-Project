@@ -34,13 +34,15 @@
     <TextView
         android:id="@+id/txtName"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="marquee"
+        android:maxLines="1"
+        android:text="TextView"
         android:textColor="@color/white"
         android:textSize="18sp"
-        android:maxLines="1"
-        android:ellipsize="marquee"
-        android:layout_height="wrap_content"
-        tools:text="TextView"
-        app:layout_constraintEnd_toStartOf="@+id/rightGuideline2"
+        app:layout_constraintEnd_toStartOf="@+id/btnMore"
         app:layout_constraintStart_toEndOf="@+id/imgBack"
         app:layout_constraintTop_toTopOf="@+id/imgBack" />
 
@@ -56,14 +58,14 @@
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline2"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline2"
         app:layout_constraintTop_toBottomOf="@+id/txtName"
-        tools:src="@tools:sample/avatars" />
+        />
 
     <TextView
         android:id="@+id/txtTrackName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        tools:text="TextView"
+        android:text="TextView"
         android:textSize="18sp"
         android:textColor="@color/white"
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline2"
@@ -95,7 +97,7 @@
         android:id="@+id/txtEndTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="TextView"
+        android:text="TextView"
         android:textSize="12sp"
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline2"
         app:layout_constraintTop_toBottomOf="@+id/progressBar" />
@@ -109,4 +111,13 @@
         app:layout_constraintEnd_toStartOf="@+id/rightGuideline2"
         app:layout_constraintStart_toStartOf="@+id/leftGuideline2"
         app:layout_constraintTop_toBottomOf="@+id/txtCurrentTime" />
+
+    <ImageView
+        android:id="@+id/btnMore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_more"
+        app:layout_constraintBottom_toBottomOf="@+id/imgBack"
+        app:layout_constraintEnd_toStartOf="@+id/rightGuideline2"
+        app:layout_constraintTop_toTopOf="@+id/imgBack" />
 </androidx.constraintlayout.widget.ConstraintLayout>
