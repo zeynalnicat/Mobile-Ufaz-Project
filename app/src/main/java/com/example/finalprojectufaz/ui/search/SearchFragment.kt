@@ -64,7 +64,7 @@ class SearchFragment : Fragment() {
     private fun handleChip(){
         binding.chipAlbum.setOnClickListener {
             val albumItems = List(10) {
-            MockTrack("Album $it", "https://picsum.photos/200/300")
+            MockTrack("Album $it", "https://cdn-images.dzcdn.net/images/cover/44c0a2696951b044e65d0e33d65a5d32/0x1900-000000-80-0-0.jpg")
 
         }
          adapter.submitList(albumItems)
@@ -73,7 +73,7 @@ class SearchFragment : Fragment() {
 
         binding.chipTrack.setOnClickListener {
             val items = List(10) {
-                MockTrack("Track ${it}","https://picsum.photos/200/300")
+                MockTrack("Track ${it}","https://c.saavncdn.com/editorial/Let_sPlayAlanWalker_20241122142442.jpg")
             }
             adapter.submitList(items)
             adapter.setNavFunction { navToTrack() }

@@ -2,8 +2,9 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="primary">#161925</color>
-    <color name="secondary">#121212</color>
+    <color name="primary">#191414</color>
+    <color name="secondary">#0B192C</color>
     <color name="iconColor">#8E8E8E</color>
+    <color name="darkBlue">#0A071E</color>
     <color name="txtColor">#BCBBBB</color>
 </resources>

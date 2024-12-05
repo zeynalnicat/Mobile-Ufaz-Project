@@ -19,8 +19,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_gradient">
+            android:layout_height="wrap_content">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
@@ -39,7 +38,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:clickable="true"
-        android:backgroundTint="@color/secondary"
+        android:backgroundTint="@color/primary"
         android:src="@drawable/icon_add_list"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="80dp"

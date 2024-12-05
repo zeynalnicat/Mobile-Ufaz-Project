@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:id="@+id/nestedScroll"
-    android:background="@drawable/bg_gradient"
     android:layout_height="match_parent"
     android:fillViewport="true"
     tools:context=".ui.search.SearchFragment">
@@ -73,7 +72,7 @@
                 android:layout_width="wrap_content"
                 android:text="Tracks"
                 app:chipBackgroundColor="@color/primary"
-                app:checkedIconTint="@color/secondary"
+                app:checkedIconTint="@color/iconColor"
                 app:chipStrokeColor="@color/iconColor"
                 app:checkedIconVisible="true"
                 android:textColor="@color/iconColor"
