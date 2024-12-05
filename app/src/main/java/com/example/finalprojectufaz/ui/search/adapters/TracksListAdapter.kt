@@ -9,7 +9,8 @@ import com.bumptech.glide.Glide
 import com.example.finalprojectufaz.databinding.ItemTrackBinding
 import com.example.finalprojectufaz.domain.mocks.MockTrack
 
-class TracksListAdapter(private val navTo : ()->Unit ):RecyclerView.Adapter<TracksListAdapter.ViewHolder>() {
+class TracksListAdapter:RecyclerView.Adapter<TracksListAdapter.ViewHolder>() {
+    private var navTo : ()->Unit = {}
     private val callBack = object:DiffUtil.ItemCallback<MockTrack>(){
         override fun areItemsTheSame(oldItem: MockTrack, newItem: MockTrack): Boolean {
            return oldItem===newItem
@@ -52,6 +53,12 @@ class TracksListAdapter(private val navTo : ()->Unit ):RecyclerView.Adapter<Trac
 
     fun submitList(items:List<MockTrack>){
         diffUtil.submitList(items)
+    }
+
+    fun setNavFunction(nav:()->Unit){
+        this.navTo = {
+            nav()
+        }
     }
 
 

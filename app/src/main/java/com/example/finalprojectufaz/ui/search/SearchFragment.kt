@@ -31,12 +31,58 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSearchBinding.inflate(layoutInflater)
-        adapter = TracksListAdapter{nav()}
+        adapter = TracksListAdapter()
+        adapter.setNavFunction { navToTrack() }
+        binding.recyclerView.layoutManager = GridLayoutManager(requireContext(),2)
+        binding.recyclerView.adapter=adapter
 
         setAdapter()
         handleChip()
+        animBottom()
 
-         bottomNavigationView= requireActivity().findViewById(R.id.bottomNav)
+
+        return binding.root
+    }
+
+
+    private fun setAdapter(){
+        val items = List(10) {
+            MockTrack("Track ${it}","https://picsum.photos/200/300")
+        }
+        adapter.submitList(items)
+
+    }
+
+    private fun navToTrack(){
+        findNavController().navigate(R.id.action_searchFragment_to_detailsFragment)
+    }
+
+    private fun navToAlbum(){
+        findNavController().navigate(R.id.action_searchFragment_to_albumFragment)
+    }
+
+    private fun handleChip(){
+        binding.chipAlbum.setOnClickListener {
+            val albumItems = List(10) {
+            MockTrack("Album $it", "https://picsum.photos/200/300")
+
+        }
+         adapter.submitList(albumItems)
+         adapter.setNavFunction { navToAlbum() }
+            }
+
+        binding.chipTrack.setOnClickListener {
+            val items = List(10) {
+                MockTrack("Track ${it}","https://picsum.photos/200/300")
+            }
+            adapter.submitList(items)
+            adapter.setNavFunction { navToTrack() }
+        }
+
+        }
+
+    private fun animBottom(){
+        bottomNavigationView= requireActivity().findViewById(R.id.bottomNav)
 
         binding.nestedScroll.setOnScrollChangeListener { _, _, scrollY, _, _ ->
             if (scrollY > this.scrollY && isBottomNavVisible) {
@@ -46,7 +92,6 @@ class SearchFragment : Fragment() {
             }
             this.scrollY = scrollY
         }
-        return binding.root
     }
 
     private fun hideBottomNavigation() {
@@ -59,34 +104,4 @@ class SearchFragment : Fragment() {
         isBottomNavVisible = true
     }
 
-    private fun setAdapter(){
-        val items = List(10) {
-            MockTrack("Track ${it}","https://picsum.photos/200/300")
-        }
-        adapter.submitList(items)
-        binding.recyclerView.layoutManager = GridLayoutManager(requireContext(),2)
-        binding.recyclerView.adapter=adapter
-    }
-
-    private fun nav(){
-        findNavController().navigate(R.id.action_searchFragment_to_detailsFragment)
-    }
-
-    private fun handleChip(){
-        binding.chipAlbum.setOnClickListener {
-            val albumItems = List(10) {
-            MockTrack("Album $it", "https://picsum.photos/200/300")
-        }
-            requireActivity().runOnUiThread {
-                adapter.submitList(albumItems)
-            } }
-
-        binding.chipTrack.setOnClickListener {
-            val items = List(10) {
-                MockTrack("Track ${it}","https://picsum.photos/200/300")
-            }
-            adapter.submitList(items)
-        }
-
-        }
 }

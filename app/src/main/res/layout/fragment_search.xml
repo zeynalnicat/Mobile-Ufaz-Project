@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:id="@+id/nestedScroll"
+    android:background="@drawable/bg_gradient"
     android:layout_height="match_parent"
     android:fillViewport="true"
     tools:context=".ui.search.SearchFragment">
@@ -22,7 +23,10 @@
             android:drawablePadding="10dp"
             android:ems="10"
             android:hint="Search for track"
+            android:textColorHint="@color/txtColor"
             android:inputType="text"
+            android:drawableTint="@color/txtColor"
+            android:textColor="@color/white"
             android:padding="10dp"
             app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
             app:layout_constraintStart_toStartOf="@+id/leftGuideline"

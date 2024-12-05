@@ -6,7 +6,7 @@
     app:startDestination="@id/searchFragment">
     <fragment
         android:id="@+id/detailsFragment"
-        android:name="com.example.finalprojectufaz.ui.details.DetailsFragment"
+        android:name="com.example.finalprojectufaz.ui.track_details.DetailsFragment"
         android:label="fragment_details"
         tools:layout="@layout/fragment_details" />
     <fragment
@@ -22,10 +22,22 @@
         <action
             android:id="@+id/action_searchFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_albumFragment"
+            app:destination="@id/albumFragment" />
     </fragment>
     <fragment
         android:id="@+id/playlistFragment"
         android:name="com.example.finalprojectufaz.ui.playlist.PlaylistFragment"
         android:label="fragment_playlist"
         tools:layout="@layout/fragment_playlist" />
+    <fragment
+        android:id="@+id/albumFragment"
+        android:name="com.example.finalprojectufaz.ui.album_detail.AlbumDetailFragment"
+        android:label="fragment_album"
+        tools:layout="@layout/fragment_album_detail">
+        <action
+            android:id="@+id/action_albumFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
 </navigation>

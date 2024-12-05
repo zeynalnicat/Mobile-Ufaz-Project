@@ -1,4 +1,4 @@
-package com.example.finalprojectufaz.ui.playlist
+package com.example.finalprojectufaz.ui.album_detail
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,19 +6,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.helper.widget.Grid
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.bumptech.glide.Glide
 import com.example.finalprojectufaz.R
-import com.example.finalprojectufaz.databinding.FragmentPlaylistBinding
-import com.example.finalprojectufaz.domain.mocks.MockPlaylist
-import com.example.finalprojectufaz.ui.playlist.adapters.PlaylistAdapter
+import com.example.finalprojectufaz.databinding.FragmentAlbumDetailBinding
+import com.example.finalprojectufaz.domain.mocks.MockAlbum
+import com.example.finalprojectufaz.domain.mocks.MockTrack
+import com.example.finalprojectufaz.ui.album_detail.adapters.AlbumDetailsAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
-class PlaylistFragment : Fragment() {
-    private lateinit var binding:FragmentPlaylistBinding
+class AlbumDetailFragment : Fragment() {
+    private lateinit var binding: FragmentAlbumDetailBinding
     private lateinit var bottomNavigationView: BottomNavigationView
     private var isBottomNavVisible = true
-    private lateinit var adapter: PlaylistAdapter
+    private lateinit var adapter: AlbumDetailsAdapter
     private var scrollY = 0
 
 
@@ -26,20 +29,34 @@ class PlaylistFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        adapter = PlaylistAdapter()
-        binding = FragmentPlaylistBinding.inflate(layoutInflater)
+        binding = FragmentAlbumDetailBinding.inflate(layoutInflater)
+        adapter = AlbumDetailsAdapter()
+        Glide.with(binding.root)
+            .load("https://picsum.photos/200/300")
+            .into(binding.imgAlbum)
         setAdapter()
         animBottom()
+        setNavigation()
         return binding.root
     }
 
+
     private fun setAdapter(){
-        val playlists = List(20){
-            MockPlaylist("Playlist ${it}",it)
+        val tracks = List(10){
+            MockTrack("Track ${it}","https://picsum.photos/200/300")
         }
-        adapter.submitList(playlists)
+        adapter.submitList(tracks)
+        adapter.setNavFunction { findNavController().navigate(R.id.action_albumFragment_to_detailsFragment) }
         binding.recyclerView.layoutManager = GridLayoutManager(requireContext(),1)
         binding.recyclerView.adapter = adapter
+    }
+
+
+    private fun setNavigation(){
+        binding.btnBack.setOnClickListener{
+            findNavController().popBackStack()
+        }
+
     }
 
     private fun animBottom(){
@@ -64,6 +81,4 @@ class PlaylistFragment : Fragment() {
         bottomNavigationView.animate().translationY(0f).start()
         isBottomNavVisible = true
     }
-
-
 }

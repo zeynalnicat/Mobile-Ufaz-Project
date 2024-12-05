@@ -1,4 +1,4 @@
-package com.example.finalprojectufaz.ui.details
+package com.example.finalprojectufaz.ui.track_details
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.finalprojectufaz.MainActivity
-import com.example.finalprojectufaz.R
 import com.example.finalprojectufaz.databinding.FragmentDetailsBinding
 
 
