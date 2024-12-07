@@ -8,7 +8,11 @@
         android:id="@+id/detailsFragment"
         android:name="com.example.finalprojectufaz.ui.track_details.DetailsFragment"
         android:label="fragment_details"
-        tools:layout="@layout/fragment_details" />
+        tools:layout="@layout/fragment_details" >
+        <argument
+            android:name="track"
+            app:argType="com.example.finalprojectufaz.domain.track.TrackResponseModel" />
+    </fragment>
     <fragment
         android:id="@+id/quizFragment"
         android:name="com.example.finalprojectufaz.ui.quiz.QuizFragment"

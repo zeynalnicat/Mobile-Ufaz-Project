@@ -7,16 +7,16 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.finalprojectufaz.databinding.ItemTrackBinding
-import com.example.finalprojectufaz.domain.mocks.MockTrack
+import com.example.finalprojectufaz.domain.track.TrackResponseModel
 
 class TracksListAdapter:RecyclerView.Adapter<TracksListAdapter.ViewHolder>() {
-    private var navTo : ()->Unit = {}
-    private val callBack = object:DiffUtil.ItemCallback<MockTrack>(){
-        override fun areItemsTheSame(oldItem: MockTrack, newItem: MockTrack): Boolean {
+    private var navTo : (TrackResponseModel)->Unit = {}
+    private val callBack = object:DiffUtil.ItemCallback<TrackResponseModel>(){
+        override fun areItemsTheSame(oldItem: TrackResponseModel, newItem: TrackResponseModel): Boolean {
            return oldItem===newItem
         }
 
-        override fun areContentsTheSame(oldItem: MockTrack, newItem: MockTrack): Boolean {
+        override fun areContentsTheSame(oldItem: TrackResponseModel, newItem: TrackResponseModel): Boolean {
             return oldItem==newItem
         }
     }
@@ -40,26 +40,28 @@ class TracksListAdapter:RecyclerView.Adapter<TracksListAdapter.ViewHolder>() {
 
 
     inner class ViewHolder(private val binding:ItemTrackBinding):RecyclerView.ViewHolder(binding.root){
-        fun bind(item:MockTrack){
-            binding.txtName.text = item.name
+        fun bind(item:TrackResponseModel){
+            binding.txtName.text = item.title
+
             itemView.setOnClickListener{
-                navTo()
+                navTo(item)
             }
             Glide.with(itemView)
-                .load(item.img)
+                .load(item.album?.cover)
                 .into(binding.img)
         }
     }
 
-    fun submitList(items:List<MockTrack>){
+    fun submitList(items:List<TrackResponseModel>){
         diffUtil.submitList(items)
     }
 
-    fun setNavFunction(nav:()->Unit){
-        this.navTo = {
-            nav()
+    fun setNavFunction(nav:(TrackResponseModel)->Unit){
+        this.navTo = { it->
+            nav(it)
         }
     }
+
 
 
 }

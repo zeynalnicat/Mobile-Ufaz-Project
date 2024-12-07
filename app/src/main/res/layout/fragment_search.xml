@@ -13,7 +13,7 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/editTextText"
+            android:id="@+id/edtSearch"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -25,7 +25,7 @@
             android:textColorHint="@color/txtColor"
             android:inputType="text"
             android:drawableTint="@color/txtColor"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:padding="10dp"
             app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
             app:layout_constraintStart_toStartOf="@+id/leftGuideline"
@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
             app:layout_constraintStart_toStartOf="@+id/leftGuideline"
-            app:layout_constraintTop_toBottomOf="@+id/editTextText">
+            app:layout_constraintTop_toBottomOf="@+id/edtSearch">
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipTrack"
@@ -90,6 +90,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </com.google.android.material.chip.ChipGroup>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
