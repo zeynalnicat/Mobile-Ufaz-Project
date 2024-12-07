@@ -52,7 +52,9 @@ class AlbumDetailsAdapter:RecyclerView.Adapter<AlbumDetailsAdapter.ViewHolder>()
     }
 
     fun submitList(tracks:List<MockTrack>){
-        diffUtil.submitList(tracks)
+        tracks.let {
+            diffUtil.submitList(it)
+        }
     }
 
     fun setNavFunction(nav:()->Unit){

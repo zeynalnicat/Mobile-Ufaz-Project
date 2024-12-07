@@ -32,6 +32,9 @@ class SearchViewModel: ViewModel() {
                             listMusic.add(track)
                         }
                     }
+                    else{
+                        _tracks.postValue(Resource.Error(Exception(response.code().toString())))
+                    }
                 }
 
                 _tracks.postValue(Resource.Success(listMusic))
@@ -51,6 +54,8 @@ class SearchViewModel: ViewModel() {
                     response.body()?.let { track->
                         _tracks.postValue(Resource.Success(track.data))
                     }
+                }else{
+                    _tracks.postValue(Resource.Error(Exception(response.code().toString())))
                 }
             }catch (e:Exception){
                 _tracks.postValue(Resource.Error(e))

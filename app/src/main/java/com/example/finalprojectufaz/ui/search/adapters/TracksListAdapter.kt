@@ -57,8 +57,8 @@ class TracksListAdapter:RecyclerView.Adapter<TracksListAdapter.ViewHolder>() {
     }
 
     fun setNavFunction(nav:(TrackResponseModel)->Unit){
-        this.navTo = { it->
-            nav(it)
+        this.navTo = { item->
+            nav(item)
         }
     }
 

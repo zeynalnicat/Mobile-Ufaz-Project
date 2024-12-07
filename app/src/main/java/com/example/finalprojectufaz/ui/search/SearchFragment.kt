@@ -35,7 +35,6 @@ class SearchFragment : Fragment() {
     ): View? {
         binding = FragmentSearchBinding.inflate(layoutInflater)
         adapter = TracksListAdapter()
-        adapter.setNavFunction { data -> findNavController().navigate(SearchFragmentDirections.actionSearchFragmentToDetailsFragment(data))}
         binding.recyclerView.layoutManager = GridLayoutManager(requireContext(),2)
         binding.recyclerView.adapter=adapter
 
@@ -73,9 +72,15 @@ class SearchFragment : Fragment() {
 
     }
 
-    private fun setAdapter(tracks:List<TrackResponseModel>){
+    private fun setAdapter(tracks: List<TrackResponseModel>) {
+        adapter.setNavFunction { data ->
+            if (data.title != null && data.album?.cover != null) {
+                findNavController().navigate(SearchFragmentDirections.actionSearchFragmentToDetailsFragment(data))
+            } else {
+                Snackbar.make(requireView(), "Missing required data", Snackbar.LENGTH_SHORT).show()
+            }
+        }
         adapter.submitList(tracks)
-
     }
 
     private fun navToAlbum(){
