@@ -17,6 +17,9 @@ class SearchViewModel: ViewModel() {
     private val _tracks = MutableLiveData<Resource<List<out ResponseModel>>>()
     private val apiService = RetrofitInstance.getInstance().create(ApiService::class.java)
     private val _chipState = MutableLiveData(ChipState.TRACK)
+    private val _cachedTracks = MutableLiveData<List<ResponseModel>>()
+    private val _cachedAlbums = MutableLiveData<List<ResponseModel>>()
+
 
     val tracks : LiveData<Resource<List<ResponseModel>>> get() = _tracks
     val chipsState : LiveData<ChipState> get() = _chipState
@@ -27,6 +30,11 @@ class SearchViewModel: ViewModel() {
 
 
     fun getTracks(){
+        if (!_cachedTracks.value.isNullOrEmpty()) {
+            _tracks.postValue(Resource.Success(_cachedTracks.value!!))
+            return
+        }
+
         val idsMusic = listOf("89077549", "509382892", "82715364", "6461432", "1151534112", "74427068","1105744","1102744")
         val listMusic: MutableList<TrackResponseModel> = mutableListOf()
 
@@ -45,6 +53,7 @@ class SearchViewModel: ViewModel() {
                     }
                 }
 
+                _cachedTracks.postValue(listMusic)
                 _tracks.postValue(Resource.Success(listMusic))
             } catch (e:Exception){
                 _tracks.postValue(Resource.Error(e))
@@ -54,6 +63,12 @@ class SearchViewModel: ViewModel() {
     }
 
     fun getAlbums(){
+
+        if (!_cachedAlbums.value.isNullOrEmpty()) {
+
+            _tracks.postValue(Resource.Success(_cachedAlbums.value!!))
+            return
+        }
         val idsAlbum = listOf("302127","988431","119606","321254","321255","321259")
         val listAlbum: MutableList<ResponseModel> = mutableListOf()
 
@@ -68,9 +83,11 @@ class SearchViewModel: ViewModel() {
                         }
                     }
                     else{
+
                         _tracks.postValue(Resource.Error(Exception(response.code().toString())))
                     }
                 }
+                _cachedAlbums.postValue(listAlbum)
                 _tracks.postValue(Resource.Success(listAlbum))
             }catch (e:Exception){
                 _tracks.postValue(Resource.Error(e))
