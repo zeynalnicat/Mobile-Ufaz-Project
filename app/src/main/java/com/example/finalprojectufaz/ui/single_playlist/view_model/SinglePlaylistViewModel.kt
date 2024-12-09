@@ -17,10 +17,16 @@ class SinglePlaylistViewModel(private val dao:PlaylistDao):ViewModel() {
 
     private val _tracks = MutableLiveData<Resource<List<TrackResponseModel>>>()
 
+    private val _cacheTracks = MutableLiveData<List<TrackResponseModel>>()
+
     val tracks : LiveData<Resource<List<TrackResponseModel>>> get()=_tracks
 
 
     fun fetchTracks(id:Int){
+        if(!_cacheTracks.value.isNullOrEmpty()){
+            _tracks.postValue(Resource.Success(_cacheTracks.value!!))
+            return
+        }
         _tracks.postValue(Resource.Loading)
         viewModelScope.launch {
             try {
@@ -36,6 +42,7 @@ class SinglePlaylistViewModel(private val dao:PlaylistDao):ViewModel() {
                             }
                         }
                     }
+                    _cacheTracks.postValue(listTracks)
                     _tracks.postValue(Resource.Success(listTracks))
 
                 }
