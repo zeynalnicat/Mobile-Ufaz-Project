@@ -4,11 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.finalprojectufaz.data.ApiService
-import com.example.finalprojectufaz.data.RetrofitInstance
+import com.example.finalprojectufaz.data.remote.ApiService
+import com.example.finalprojectufaz.data.remote.RetrofitInstance
 import com.example.finalprojectufaz.domain.ChipState
 import com.example.finalprojectufaz.domain.ResponseModel
-import com.example.finalprojectufaz.domain.album.AlbumResponseModel
 import com.example.finalprojectufaz.domain.core.Resource
 import com.example.finalprojectufaz.domain.track.TrackResponseModel
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +27,7 @@ class SearchViewModel: ViewModel() {
 
 
     fun getTracks(){
-        val idsMusic = listOf("89077549", "509382892", "82715364", "6461432", "1151534112", "74427068")
+        val idsMusic = listOf("89077549", "509382892", "82715364", "6461432", "1151534112", "74427068","1105744","1102744")
         val listMusic: MutableList<TrackResponseModel> = mutableListOf()
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -55,7 +54,7 @@ class SearchViewModel: ViewModel() {
     }
 
     fun getAlbums(){
-        val idsAlbum = listOf("302127","988431")
+        val idsAlbum = listOf("302127","988431","119606","321254","321255","321259")
         val listAlbum: MutableList<ResponseModel> = mutableListOf()
 
         viewModelScope.launch(Dispatchers.IO) {

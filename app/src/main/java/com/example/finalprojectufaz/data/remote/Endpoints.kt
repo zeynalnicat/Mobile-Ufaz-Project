@@ -1,4 +1,4 @@
-package com.example.finalprojectufaz.data
+package com.example.finalprojectufaz.data.remote
 
 object Endpoints {
     const val track = "/track/{id}"

@@ -6,5 +6,6 @@ data class Data(
     val id: Int,
     val preview: String,
     val title: String,
-    val type: String
+    val type: String,
+    val img:String? = null
 )

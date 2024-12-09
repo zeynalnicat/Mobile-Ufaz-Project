@@ -10,18 +10,27 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.example.finalprojectufaz.R
+import com.example.finalprojectufaz.data.local.playlist.PlaylistDao
+import com.example.finalprojectufaz.data.local.playlist.RoomDB
 import com.example.finalprojectufaz.data.utils.Utils
 import com.example.finalprojectufaz.databinding.FragmentAlbumDetailBinding
+import com.example.finalprojectufaz.databinding.LayoutBottomSheetBinding
 import com.example.finalprojectufaz.domain.album.Data
 import com.example.finalprojectufaz.domain.core.Resource
 import com.example.finalprojectufaz.domain.mocks.MockAlbum
 import com.example.finalprojectufaz.domain.mocks.MockTrack
+import com.example.finalprojectufaz.domain.playlist.PlaylistDTO
 import com.example.finalprojectufaz.domain.track.TrackResponseModel
 import com.example.finalprojectufaz.ui.album_detail.adapters.AlbumDetailsAdapter
 import com.example.finalprojectufaz.ui.album_detail.viewmodel.AlbumDetailsViewModel
+import com.example.finalprojectufaz.ui.playlist.adapters.PlaylistAdapter
+import com.example.finalprojectufaz.ui.playlist.factory.PlaylistFactory
+import com.example.finalprojectufaz.ui.playlist.viewmodel.PlaylistViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 
 class AlbumDetailFragment : Fragment() {
@@ -34,6 +43,8 @@ class AlbumDetailFragment : Fragment() {
     private val args : AlbumDetailFragmentArgs by navArgs()
     private var scrollY = 0
     private val viewModel : AlbumDetailsViewModel by viewModels()
+    private lateinit var dao: PlaylistDao
+    private val pViewModel: PlaylistViewModel by viewModels { PlaylistFactory(dao) }
 
 
     override fun onCreateView(
@@ -41,8 +52,9 @@ class AlbumDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentAlbumDetailBinding.inflate(layoutInflater)
+        dao = RoomDB.accessDB(requireContext())?.playlistDao()!!
         setLayout()
-        adapter = AlbumDetailsAdapter(imgUri)
+        adapter = AlbumDetailsAdapter(imgUri,{trackId -> handleBottomSheet(trackId)})
         animBottom()
         setNavigation()
         return binding.root
@@ -104,6 +116,39 @@ class AlbumDetailFragment : Fragment() {
         }
 
     }
+
+    private fun handleBottomSheet(trackId:Int){
+            pViewModel.getPlaylists()
+            val dialog = BottomSheetDialog(requireContext())
+            val view = LayoutBottomSheetBinding.inflate(layoutInflater)
+            dialog.setCancelable(true)
+           val pAdapter = PlaylistAdapter()
+            dialog.setContentView(view.root)
+
+            pViewModel.playlists.observe(viewLifecycleOwner,{
+                when(it){
+                    is Resource.Success->{
+
+                        pAdapter.submitList(it.data.map { PlaylistDTO(it.id,0,it.name,true) })
+                        view.recyclerView.layoutManager = GridLayoutManager(requireContext(),1)
+                        view.recyclerView.adapter = pAdapter
+                    }
+
+                    is Resource.Error -> {}
+                    Resource.Loading -> {}
+                }
+            })
+
+            view.btnAdd.setOnClickListener {
+                val ids = pAdapter.getSelected()
+                pViewModel.addToPlaylists(trackId,ids)
+                dialog.dismiss()
+            }
+
+            dialog.show()
+        }
+
+
 
     private fun animBottom(){
         bottomNavigationView= requireActivity().findViewById(R.id.bottomNav)

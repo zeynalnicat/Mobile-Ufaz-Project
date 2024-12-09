@@ -4,11 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.finalprojectufaz.data.ApiService
-import com.example.finalprojectufaz.data.RetrofitInstance
+import com.example.finalprojectufaz.data.remote.ApiService
+import com.example.finalprojectufaz.data.remote.RetrofitInstance
 import com.example.finalprojectufaz.domain.album.Data
 import com.example.finalprojectufaz.domain.core.Resource
-import com.example.finalprojectufaz.domain.track.TrackResponseModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

@@ -1,36 +1,39 @@
-package com.example.finalprojectufaz.ui.playlist
+package com.example.finalprojectufaz.ui.single_playlist
 
 import android.os.Bundle
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.helper.widget.Grid
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.room.Room
+import com.example.finalprojectufaz.MainActivity
 import com.example.finalprojectufaz.R
 import com.example.finalprojectufaz.data.local.playlist.PlaylistDao
-import com.example.finalprojectufaz.data.local.playlist.PlaylistEntity
 import com.example.finalprojectufaz.data.local.playlist.RoomDB
-import com.example.finalprojectufaz.databinding.FragmentPlaylistBinding
+import com.example.finalprojectufaz.databinding.FragmentSinglePlaylistBinding
+import com.example.finalprojectufaz.domain.album.Artist
+import com.example.finalprojectufaz.domain.album.Data
 import com.example.finalprojectufaz.domain.core.Resource
-import com.example.finalprojectufaz.domain.mocks.MockPlaylist
-import com.example.finalprojectufaz.domain.playlist.PlaylistDTO
-import com.example.finalprojectufaz.ui.playlist.adapters.PlaylistAdapter
-import com.example.finalprojectufaz.ui.playlist.factory.PlaylistFactory
-import com.example.finalprojectufaz.ui.playlist.viewmodel.PlaylistViewModel
+import com.example.finalprojectufaz.domain.track.TrackResponseModel
+import com.example.finalprojectufaz.ui.album_detail.adapters.AlbumDetailsAdapter
+import com.example.finalprojectufaz.ui.single_playlist.factory.SinglePlaylistFactory
+import com.example.finalprojectufaz.ui.single_playlist.view_model.SinglePlaylistViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
-class PlaylistFragment : Fragment() {
-    private lateinit var binding:FragmentPlaylistBinding
+class SinglePlaylistFragment : Fragment() {
+    private lateinit var binding:FragmentSinglePlaylistBinding
+    private lateinit var mActivity : MainActivity
     private lateinit var bottomNavigationView: BottomNavigationView
     private var isBottomNavVisible = true
-    private lateinit var adapter: PlaylistAdapter
+    private val args:SinglePlaylistFragmentArgs by navArgs()
     private lateinit var dao: PlaylistDao
-    private val viewModel:PlaylistViewModel by viewModels {PlaylistFactory(dao)}
+    private val viewModel:SinglePlaylistViewModel by viewModels { SinglePlaylistFactory(dao) }
+    private var playlistId : Int? = null
     private var scrollY = 0
 
 
@@ -38,47 +41,47 @@ class PlaylistFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        adapter = PlaylistAdapter{findNavController().navigate(PlaylistFragmentDirections.actionPlaylistFragmentToSinglePlaylist(it))}
-        binding = FragmentPlaylistBinding.inflate(layoutInflater)
+        binding = FragmentSinglePlaylistBinding.inflate(layoutInflater)
+        mActivity = requireActivity() as MainActivity
+        playlistId = args.playlist.id
+        binding.txtPlaylistName.text = args.playlist.name
         dao = RoomDB.accessDB(requireContext())?.playlistDao()!!
-        animBottom()
         setNavigation()
+        animBottom()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.playlists.observe(viewLifecycleOwner,{
+        viewModel.tracks.observe(viewLifecycleOwner,{
             when(it){
-                is Resource.Success -> {
-                    if(it.data.isNotEmpty()){
-                        binding.txtNo.visibility = View.GONE
-                        setAdapter(it.data)
-                    }else{
-                        binding.txtNo.visibility = View.VISIBLE
-                    }
-
+                is Resource.Success ->{
+                    setAdapter(it.data)
                 }
-                is Resource.Error -> {
-                    binding.txtNo.visibility = View.VISIBLE
-                }
-
-                is Resource.Loading -> {
-
-                }
+                is Resource.Error -> {}
+                is Resource.Loading -> {}
             }
         })
 
-        viewModel.getPlaylists()
+        viewModel.fetchTracks(playlistId!!)
     }
 
-
-    private fun setAdapter(playlist:List<PlaylistDTO>){
-        adapter.submitList(playlist)
+    private fun setAdapter(data: List<TrackResponseModel>) {
+        val trackModel = data.map { Data(artist = Artist(id = it.artist?.id ?:0, name = it.artist?.name?:""), duration = it.duration, id = it.id.toInt()
+            , preview = it.preview, title = it.title, type = it.type, img = it.album.cover) }
+        val adapter = AlbumDetailsAdapter()
+        adapter.submitList(trackModel)
         binding.recyclerView.layoutManager = GridLayoutManager(requireContext(),1)
         binding.recyclerView.adapter = adapter
     }
+
+    private fun setNavigation(){
+        binding.btnBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+    }
+
 
     private fun animBottom(){
         bottomNavigationView= requireActivity().findViewById(R.id.bottomNav)
@@ -102,13 +105,6 @@ class PlaylistFragment : Fragment() {
         bottomNavigationView.animate().translationY(0f).start()
         isBottomNavVisible = true
     }
-
-    private fun setNavigation(){
-        binding.floatingActionButton.setOnClickListener {
-            findNavController().navigate(R.id.action_playlistFragment_to_newPlaylist)
-        }
-    }
-
 
 
 }

@@ -1,22 +1,25 @@
 package com.example.finalprojectufaz.ui.playlist.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.finalprojectufaz.databinding.ItemPlaylistListBinding
-import com.example.finalprojectufaz.domain.mocks.MockPlaylist
+import com.example.finalprojectufaz.domain.playlist.PlaylistDTO
 
 
-class PlaylistAdapter: RecyclerView.Adapter<PlaylistAdapter.ViewHolder>() {
+class PlaylistAdapter(private val nav: (PlaylistDTO)->Unit = {}): RecyclerView.Adapter<PlaylistAdapter.ViewHolder>() {
 
-    private val callBack = object: DiffUtil.ItemCallback<MockPlaylist>(){
-        override fun areItemsTheSame(oldItem: MockPlaylist, newItem: MockPlaylist): Boolean {
+    private val selectedPlaylist = mutableListOf<Int>()
+
+    private val callBack = object: DiffUtil.ItemCallback<PlaylistDTO>(){
+        override fun areItemsTheSame(oldItem: PlaylistDTO, newItem: PlaylistDTO): Boolean {
             return oldItem===newItem
         }
 
-        override fun areContentsTheSame(oldItem: MockPlaylist, newItem: MockPlaylist): Boolean {
+        override fun areContentsTheSame(oldItem: PlaylistDTO, newItem: PlaylistDTO): Boolean {
             return oldItem==newItem
         }
     }
@@ -37,13 +40,37 @@ class PlaylistAdapter: RecyclerView.Adapter<PlaylistAdapter.ViewHolder>() {
     }
 
     inner class ViewHolder(private val binding: ItemPlaylistListBinding):RecyclerView.ViewHolder(binding.root){
-        fun bind(item:MockPlaylist){
-             binding.txtCount.text = item.count.toString()
+        fun bind(item:PlaylistDTO){
+            if(item.isBottomSheet){
+                binding.txtCount.visibility = View.GONE
+                binding.checkBox.visibility = View.VISIBLE
+                binding.checkBox.isChecked = item.isSelected
+                binding.checkBox.setOnCheckedChangeListener(null)
+                binding.checkBox.setOnCheckedChangeListener { _, isChecked ->
+                    item.isSelected = isChecked
+                    if(isChecked){
+                        selectedPlaylist.add(item.id)
+                    }else{
+                        selectedPlaylist.remove(item.id)
+                    }
+                }
+
+            }else{
+                binding.txtCount.text =item.total.toString()
+                itemView.setOnClickListener {
+                    nav(item)
+                }
+            }
+
              binding.txtTrackName.text = item.name
         }
     }
 
-    fun submitList(playlists:List<MockPlaylist>){
+    fun submitList(playlists:List<PlaylistDTO>){
         diffUtil.submitList(playlists)
+    }
+
+    fun getSelected():List<Int>{
+        return selectedPlaylist
     }
 }

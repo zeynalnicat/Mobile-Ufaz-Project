@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginBottom="10dp"
     android:layout_width="match_parent"
     android:backgroundTint="@color/primary"
@@ -43,5 +42,16 @@
             android:text="0"
             app:layout_constraintStart_toStartOf="@+id/txtTrackName"
             app:layout_constraintTop_toBottomOf="@+id/txtTrackName" />
+
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:buttonTint="@color/secondary"
+            android:layout_width="wrap_content"
+            style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

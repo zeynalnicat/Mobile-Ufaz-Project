@@ -38,6 +38,9 @@
         <action
             android:id="@+id/action_playlistFragment_to_newPlaylist"
             app:destination="@id/newPlaylist" />
+        <action
+            android:id="@+id/action_playlistFragment_to_singlePlaylist"
+            app:destination="@id/singlePlaylist" />
     </fragment>
     <fragment
         android:id="@+id/albumFragment"
@@ -57,5 +60,15 @@
         android:name="com.example.finalprojectufaz.ui.add_playlist.AddPlaylistFragment"
         android:label="fragment_new_playlist"
         tools:layout="@layout/fragment_add_playlist"/>
+
+    <fragment
+        android:id="@+id/singlePlaylist"
+        android:name="com.example.finalprojectufaz.ui.single_playlist.SinglePlaylistFragment"
+        android:label="fragment_single_playlist"
+        tools:layout="@layout/fragment_single_playlist">
+        <argument
+            android:name="playlist"
+            app:argType="com.example.finalprojectufaz.domain.playlist.PlaylistDTO" />
+    </fragment>
 
 </navigation>

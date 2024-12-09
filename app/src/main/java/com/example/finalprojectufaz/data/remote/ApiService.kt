@@ -1,4 +1,4 @@
-package com.example.finalprojectufaz.data
+package com.example.finalprojectufaz.data.remote
 
 import com.example.finalprojectufaz.domain.album.AlbumResponseModel
 import com.example.finalprojectufaz.domain.album.SingleAlbumModel

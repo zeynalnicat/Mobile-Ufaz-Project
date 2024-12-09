@@ -1,4 +1,4 @@
-package com.example.finalprojectufaz.data
+package com.example.finalprojectufaz.data.remote
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
