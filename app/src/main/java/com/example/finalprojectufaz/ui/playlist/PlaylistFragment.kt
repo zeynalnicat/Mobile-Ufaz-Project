@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.helper.widget.Grid
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.finalprojectufaz.R
 import com.example.finalprojectufaz.databinding.FragmentPlaylistBinding
@@ -30,6 +31,7 @@ class PlaylistFragment : Fragment() {
         binding = FragmentPlaylistBinding.inflate(layoutInflater)
         setAdapter()
         animBottom()
+        setNavigation()
         return binding.root
     }
 
@@ -64,6 +66,13 @@ class PlaylistFragment : Fragment() {
         bottomNavigationView.animate().translationY(0f).start()
         isBottomNavVisible = true
     }
+
+    private fun setNavigation(){
+        binding.floatingActionButton.setOnClickListener {
+            findNavController().navigate(R.id.action_playlistFragment_to_newPlaylist)
+        }
+    }
+
 
 
 }

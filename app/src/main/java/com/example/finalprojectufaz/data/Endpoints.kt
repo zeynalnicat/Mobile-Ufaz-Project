@@ -2,6 +2,8 @@ package com.example.finalprojectufaz.data
 
 object Endpoints {
     const val track = "/track/{id}"
-    const val album = "/album"
-    const val search = "/search?q"
+    const val album = "/album/{id}"
+    const val search_track= "/search?q=track:"
+    const val search_album = "/search?q=album:"
+    const val single_album_tracks = "/album/{tracklist}/tracks"
 }

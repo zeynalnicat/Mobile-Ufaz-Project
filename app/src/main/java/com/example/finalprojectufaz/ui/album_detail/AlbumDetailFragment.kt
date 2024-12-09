@@ -6,14 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.helper.widget.Grid
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.example.finalprojectufaz.R
+import com.example.finalprojectufaz.data.utils.Utils
 import com.example.finalprojectufaz.databinding.FragmentAlbumDetailBinding
+import com.example.finalprojectufaz.domain.album.Data
+import com.example.finalprojectufaz.domain.core.Resource
 import com.example.finalprojectufaz.domain.mocks.MockAlbum
 import com.example.finalprojectufaz.domain.mocks.MockTrack
+import com.example.finalprojectufaz.domain.track.TrackResponseModel
 import com.example.finalprojectufaz.ui.album_detail.adapters.AlbumDetailsAdapter
+import com.example.finalprojectufaz.ui.album_detail.viewmodel.AlbumDetailsViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
@@ -21,8 +28,12 @@ class AlbumDetailFragment : Fragment() {
     private lateinit var binding: FragmentAlbumDetailBinding
     private lateinit var bottomNavigationView: BottomNavigationView
     private var isBottomNavVisible = true
+    private var trackUri = ""
+    private var imgUri = ""
     private lateinit var adapter: AlbumDetailsAdapter
+    private val args : AlbumDetailFragmentArgs by navArgs()
     private var scrollY = 0
+    private val viewModel : AlbumDetailsViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -30,27 +41,62 @@ class AlbumDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentAlbumDetailBinding.inflate(layoutInflater)
-        adapter = AlbumDetailsAdapter()
-        Glide.with(binding.root)
-            .load("https://picsum.photos/200/300")
-            .into(binding.imgAlbum)
-        setAdapter()
+        setLayout()
+        adapter = AlbumDetailsAdapter(imgUri)
         animBottom()
         setNavigation()
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    private fun setAdapter(){
-        val tracks = List(10){
-            MockTrack("Track ${it}","https://picsum.photos/200/300")
-        }
+        viewModel.tracks.observe(viewLifecycleOwner,{
+            when(it){
+                is Resource.Success -> {
+                    setAdapter(it.data)
+                }
+
+                is Resource.Error -> {
+
+                }
+
+                is Resource.Loading -> {
+
+                }
+            }
+        })
+
+        viewModel.fetchTracks(trackUri)
+    }
+
+
+    private fun setLayout(){
+        val album = args.album
+        trackUri = album.id.toString()
+        imgUri = album.cover
+
+        Glide.with(binding.root)
+            .load(imgUri)
+            .into(binding.imgAlbum)
+
+        Glide.with(binding.root)
+            .load(album.artistImg)
+            .into(binding.imgArtist)
+
+        binding.txtAlbumName.text = album.title
+        binding.txtArtist.text = album.artist
+        binding.txtDuration.text = Utils.formatSecondsToMMSS(album.duration)
+
+    }
+
+
+    private fun setAdapter(tracks:List<Data>){
         adapter.submitList(tracks)
-        adapter.setNavFunction { findNavController().navigate(R.id.action_albumFragment_to_detailsFragment) }
+        adapter.setNavFunction { track-> findNavController().navigate(AlbumDetailFragmentDirections.actionAlbumFragmentToDetailsFragment(track)) }
         binding.recyclerView.layoutManager = GridLayoutManager(requireContext(),1)
         binding.recyclerView.adapter = adapter
     }
-
 
     private fun setNavigation(){
         binding.btnBack.setOnClickListener{

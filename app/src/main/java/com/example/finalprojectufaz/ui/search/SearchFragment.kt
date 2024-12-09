@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
@@ -12,8 +13,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.finalprojectufaz.R
 import com.example.finalprojectufaz.databinding.FragmentSearchBinding
+import com.example.finalprojectufaz.domain.ChipState
+import com.example.finalprojectufaz.domain.ResponseModel
 import com.example.finalprojectufaz.domain.core.Resource
-import com.example.finalprojectufaz.domain.mocks.MockTrack
+import com.example.finalprojectufaz.domain.nav.TrackNavModel
 import com.example.finalprojectufaz.domain.track.TrackResponseModel
 import com.example.finalprojectufaz.ui.search.adapters.TracksListAdapter
 import com.example.finalprojectufaz.ui.search.viewmodel.SearchViewModel
@@ -39,6 +42,7 @@ class SearchFragment : Fragment() {
         binding.recyclerView.adapter=adapter
 
         animBottom()
+        handleChip()
 
 
         return binding.root
@@ -67,51 +71,76 @@ class SearchFragment : Fragment() {
             }
 
         })
-        setSearch()
-        viewModel.getTracks()
 
+        viewModel.chipsState.observe(viewLifecycleOwner,{
+            when(it){
+                ChipState.TRACK -> {
+                    binding.chipTrack.chipBackgroundColor =
+                        ContextCompat.getColorStateList(requireContext(), R.color.white)
+                    binding.chipAlbum.chipBackgroundColor =
+                        ContextCompat.getColorStateList(requireContext(), R.color.primary)
+                    viewModel.getTracks()
+                    setSearch(ChipState.TRACK)
+
+                }
+
+                ChipState.ALBUM -> {
+                    binding.chipTrack.chipBackgroundColor =
+                        ContextCompat.getColorStateList(requireContext(), R.color.primary)
+                    binding.chipAlbum.chipBackgroundColor =
+                        ContextCompat.getColorStateList(requireContext(), R.color.white)
+                    viewModel.getAlbums()
+                    setSearch(ChipState.ALBUM)
+                }
+            }
+        })
     }
 
-    private fun setAdapter(tracks: List<TrackResponseModel>) {
-        adapter.setNavFunction { data ->
-            if (data.title != null && data.album?.cover != null) {
+    private fun setAdapter(tracks: List<ResponseModel>) {
+        adapter.setNavTrack { data ->
                 findNavController().navigate(SearchFragmentDirections.actionSearchFragmentToDetailsFragment(data))
-            } else {
-                Snackbar.make(requireView(), "Missing required data", Snackbar.LENGTH_SHORT).show()
-            }
+        }
+
+        adapter.setNavAlbum { data->
+            findNavController().navigate(SearchFragmentDirections.actionSearchFragmentToAlbumFragment(data))
         }
         adapter.submitList(tracks)
     }
 
-    private fun navToAlbum(){
-        findNavController().navigate(R.id.action_searchFragment_to_albumFragment)
-    }
+    private fun handleChip(){
+        binding.chipAlbum.setOnClickListener {
+            viewModel.setChipState(ChipState.ALBUM)
 
-//    private fun handleChip(){
-//        binding.chipAlbum.setOnClickListener {
-//            val albumItems = List(10) {
-//            MockTrack("Album $it", "https://cdn-images.dzcdn.net/images/cover/44c0a2696951b044e65d0e33d65a5d32/0x1900-000000-80-0-0.jpg")
-//
-//        }
-//         adapter.submitList(albumItems)
-//         adapter.setNavFunction { navToAlbum() }
-//            }
-//
-//        binding.chipTrack.setOnClickListener {
-//            val items = List(10) {
-//                MockTrack("Track ${it}","https://c.saavncdn.com/editorial/Let_sPlayAlanWalker_20241122142442.jpg")
-//            }
-//            adapter.submitList(items)
-//            adapter.setNavFunction { navToTrack() }
-//        }
-//
-//        }
+        }
 
-    private fun setSearch(){
+        binding.chipTrack.setOnClickListener {
+            viewModel.setChipState(ChipState.TRACK)
+        }
+
+
+
+            }
+
+
+
+
+    private fun setSearch(state: ChipState){
         binding.edtSearch.doAfterTextChanged {
             it?.let { src->
                 if(src.toString().isNotEmpty()){
-                    viewModel.searchTrack(src.toString())
+                    viewModel.search(src.toString(),state)
+                }else{
+                    viewModel.chipsState.observe(viewLifecycleOwner,{
+                        when(it){
+                            ChipState.TRACK -> {
+                                viewModel.getTracks()
+
+                            }
+                            ChipState.ALBUM -> {
+                                viewModel.getAlbums()
+                            }
+                        }
+                    })
                 }
             }
         }

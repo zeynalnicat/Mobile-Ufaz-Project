@@ -7,17 +7,20 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.finalprojectufaz.databinding.ItemAlbumTrackBinding
+import com.example.finalprojectufaz.domain.album.Data
 import com.example.finalprojectufaz.domain.mocks.MockTrack
+import com.example.finalprojectufaz.domain.nav.TrackNavModel
 
 
-class AlbumDetailsAdapter:RecyclerView.Adapter<AlbumDetailsAdapter.ViewHolder>() {
-    private var navTo : ()->Unit = {}
-    private val callBack = object: DiffUtil.ItemCallback<MockTrack>(){
-        override fun areItemsTheSame(oldItem: MockTrack, newItem: MockTrack): Boolean {
+
+class AlbumDetailsAdapter(private val img:String):RecyclerView.Adapter<AlbumDetailsAdapter.ViewHolder>() {
+    private var navTo : (TrackNavModel)->Unit = {}
+    private val callBack = object: DiffUtil.ItemCallback<Data>(){
+        override fun areItemsTheSame(oldItem: Data, newItem: Data): Boolean {
             return oldItem===newItem
         }
 
-        override fun areContentsTheSame(oldItem: MockTrack, newItem: MockTrack): Boolean {
+        override fun areContentsTheSame(oldItem: Data, newItem: Data): Boolean {
             return oldItem==newItem
         }
     }
@@ -38,28 +41,29 @@ class AlbumDetailsAdapter:RecyclerView.Adapter<AlbumDetailsAdapter.ViewHolder>()
     }
 
     inner class ViewHolder(private val binding:ItemAlbumTrackBinding):RecyclerView.ViewHolder(binding.root){
-        fun bind(track:MockTrack){
+        fun bind(track:Data){
             Glide.with(itemView)
-                .load(track.img)
+                .load(img)
                 .into(binding.imgTrack)
 
-            binding.txtTrackName.text = track.name
+            binding.txtTrackName.text = track.title
             itemView.setOnClickListener {
-                navTo()
+                val trck = TrackNavModel(id = track.id.toLong(),img=img, title = track.title,track.artist.name,track.preview,track.duration)
+                navTo(trck)
             }
         }
 
     }
 
-    fun submitList(tracks:List<MockTrack>){
+    fun submitList(tracks:List<Data>){
         tracks.let {
             diffUtil.submitList(it)
         }
     }
 
-    fun setNavFunction(nav:()->Unit){
-        this.navTo = {
-            nav()
+    fun setNavFunction(nav:(TrackNavModel)->Unit){
+        this.navTo = { item->
+            nav(item)
         }
     }
 }
