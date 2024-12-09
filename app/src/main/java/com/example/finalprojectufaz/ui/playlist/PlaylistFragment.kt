@@ -14,7 +14,9 @@ import com.example.finalprojectufaz.R
 import com.example.finalprojectufaz.data.local.playlist.PlaylistDao
 import com.example.finalprojectufaz.data.local.playlist.PlaylistEntity
 import com.example.finalprojectufaz.data.local.playlist.RoomDB
+import com.example.finalprojectufaz.databinding.BottomSheetPlaylistBinding
 import com.example.finalprojectufaz.databinding.FragmentPlaylistBinding
+import com.example.finalprojectufaz.databinding.LayoutBottomSheetBinding
 import com.example.finalprojectufaz.domain.core.Resource
 import com.example.finalprojectufaz.domain.mocks.MockPlaylist
 import com.example.finalprojectufaz.domain.playlist.PlaylistDTO
@@ -22,6 +24,7 @@ import com.example.finalprojectufaz.ui.playlist.adapters.PlaylistAdapter
 import com.example.finalprojectufaz.ui.playlist.factory.PlaylistFactory
 import com.example.finalprojectufaz.ui.playlist.viewmodel.PlaylistViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 
 class PlaylistFragment : Fragment() {
@@ -38,7 +41,7 @@ class PlaylistFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        adapter = PlaylistAdapter{findNavController().navigate(PlaylistFragmentDirections.actionPlaylistFragmentToSinglePlaylist(it))}
+        adapter = PlaylistAdapter({data -> setAdapterNavigation(data)},{handleBottomSheet(it)})
         binding = FragmentPlaylistBinding.inflate(layoutInflater)
         dao = RoomDB.accessDB(requireContext())?.playlistDao()!!
         animBottom()
@@ -73,6 +76,21 @@ class PlaylistFragment : Fragment() {
         viewModel.getPlaylists()
     }
 
+    private fun handleBottomSheet(playlistId:Int){
+        val dialog = BottomSheetDialog(requireContext())
+        val view = BottomSheetPlaylistBinding.inflate(layoutInflater)
+        dialog.setCancelable(true)
+        dialog.setContentView(view.root)
+
+        view.viewRemove.setOnClickListener {
+            viewModel.remove(playlistId)
+            viewModel.cachePlaylists.postValue(emptyList())
+        }
+
+
+        dialog.show()
+    }
+
 
     private fun setAdapter(playlist:List<PlaylistDTO>){
         adapter.submitList(playlist)
@@ -103,8 +121,14 @@ class PlaylistFragment : Fragment() {
         isBottomNavVisible = true
     }
 
+    private fun setAdapterNavigation(data:PlaylistDTO){
+        viewModel.cachePlaylists.postValue(emptyList())
+        findNavController().navigate(PlaylistFragmentDirections.actionPlaylistFragmentToSinglePlaylist(data))
+    }
+
     private fun setNavigation(){
         binding.floatingActionButton.setOnClickListener {
+            viewModel.cachePlaylists.postValue(emptyList())
             findNavController().navigate(R.id.action_playlistFragment_to_newPlaylist)
         }
     }

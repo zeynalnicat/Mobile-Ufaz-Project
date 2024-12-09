@@ -61,7 +61,7 @@ class TracksListAdapter:RecyclerView.Adapter<TracksListAdapter.ViewHolder>() {
                 binding.txtName.text = item.title
 
                 itemView.setOnClickListener {
-                    val albm = AlbumNavModel(id = item.id, artist = item.artist.name, cover = item.cover, tracksUri = item.tracklist, title = item.title, duration = item.duration, artistImg = item.artist.picture)
+                    val albm = AlbumNavModel(id = item.id, artist = item.artist?.name?:"", cover = item.cover, tracksUri = item.tracklist, title = item.title, duration = item.duration, artistImg = item.artist?.picture?:"")
                     navAlbum(albm)
                 }
 

@@ -16,7 +16,7 @@ class PlaylistViewModel(private val dao: PlaylistDao):ViewModel() {
 
     private val _playlists = MutableLiveData<Resource<List<PlaylistDTO>>>()
 
-    private val _cachePlaylists = MutableLiveData<List<PlaylistDTO>>()
+     val cachePlaylists = MutableLiveData<List<PlaylistDTO>>()
 
     val playlists : LiveData<Resource<List<PlaylistDTO>>> get() = _playlists
 
@@ -29,8 +29,8 @@ class PlaylistViewModel(private val dao: PlaylistDao):ViewModel() {
     }
 
     fun getPlaylists(){
-        if(!_cachePlaylists.value.isNullOrEmpty()){
-            _playlists.postValue(Resource.Success(_cachePlaylists.value!!))
+        if(!cachePlaylists.value.isNullOrEmpty()){
+            _playlists.postValue(Resource.Success(cachePlaylists.value!!))
             return
         }
         viewModelScope.launch(Dispatchers.IO) {
@@ -43,7 +43,7 @@ class PlaylistViewModel(private val dao: PlaylistDao):ViewModel() {
                         val plModel = PlaylistDTO(it.id,countPL,it.name)
                         pls.add(plModel)
                     }
-                    _cachePlaylists.postValue(pls)
+                    cachePlaylists.postValue(pls)
                     _playlists.postValue(Resource.Success(pls))
                 }else{
                     _playlists.postValue(Resource.Success(emptyList()))
@@ -62,6 +62,17 @@ class PlaylistViewModel(private val dao: PlaylistDao):ViewModel() {
                pIds.forEach { id->
                    dao.insertPlaylist(TrackEntity(0,trackId,id))
                }
+            }catch (e:Exception){
+
+            }
+        }
+    }
+
+    fun remove(playlistId:Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+               dao.removePlaylist(playlistId)
+                getPlaylists()
             }catch (e:Exception){
 
             }

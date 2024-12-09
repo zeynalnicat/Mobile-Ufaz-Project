@@ -125,26 +125,31 @@ class SearchFragment : Fragment() {
 
 
     private fun setSearch(state: ChipState){
-        binding.edtSearch.doAfterTextChanged {
-            it?.let { src->
-                if(src.toString().isNotEmpty()){
-                    viewModel.search(src.toString(),state)
-                }else{
-                    viewModel.chipsState.observe(viewLifecycleOwner,{
-                        when(it){
-                            ChipState.TRACK -> {
-                                viewModel.getTracks()
-
-                            }
-                            ChipState.ALBUM -> {
-                                viewModel.getAlbums()
-                            }
+        if(state==ChipState.TRACK){
+            binding.edtSearch.doAfterTextChanged {
+                    it?.let { src ->
+                        if (src.toString().isNotEmpty()) {
+                            viewModel.search(src.toString(), ChipState.TRACK)
+                        }else{
+                            viewModel.getTracks()
                         }
-                    })
                 }
             }
+            }
+       else{
+           binding.edtSearch.doAfterTextChanged {
+                it?.let { src ->
+                    if (src.toString().isNotEmpty()) {
+                        viewModel.search(src.toString(), ChipState.ALBUM)
+                    }else{
+                        viewModel.getAlbums()
+                    }
+                }
+
+            }
         }
-    }
+            }
+
 
     private fun animBottom(){
         bottomNavigationView= requireActivity().findViewById(R.id.bottomNav)

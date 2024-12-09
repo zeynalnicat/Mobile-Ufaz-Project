@@ -8,6 +8,8 @@ import com.example.finalprojectufaz.data.remote.ApiService
 import com.example.finalprojectufaz.data.remote.RetrofitInstance
 import com.example.finalprojectufaz.domain.ChipState
 import com.example.finalprojectufaz.domain.ResponseModel
+import com.example.finalprojectufaz.domain.album.AlbumResponseModel
+import com.example.finalprojectufaz.domain.album.Artist
 import com.example.finalprojectufaz.domain.core.Resource
 import com.example.finalprojectufaz.domain.track.TrackResponseModel
 import kotlinx.coroutines.Dispatchers
@@ -104,6 +106,7 @@ class SearchViewModel: ViewModel() {
                     val response = apiService.search(name)
                     if(response.isSuccessful ){
                         response.body()?.let { track->
+                            _cachedTracks.postValue(track.data)
                             _tracks.postValue(Resource.Success(track.data))
                         }
                     }else{
@@ -120,9 +123,20 @@ class SearchViewModel: ViewModel() {
                     val response = apiService.searchAlbum(name)
                     if(response.isSuccessful ){
                         response.body()?.let { track->
-//                            _tracks.postValue(Resource.Success(
-//                                track.data.map { AlbumResponseModel(artist = it.artist, cover = it.album.cover, nb_tracks = it.album.) }
-//                            ))
+                            val albums = track.data.map {
+                                AlbumResponseModel(
+                                    cover = it.album.cover,
+                                    id = it.album.id,
+                                    title = it.album.title,
+                                    tracklist = it.album.tracklist
+                                )
+                            }
+
+                            _cachedTracks.postValue(albums)
+                            _tracks.postValue(Resource.Success(
+                               albums
+                         ))
+
                         }
                     }else{
                         _tracks.postValue(Resource.Error(Exception(response.code().toString())))

@@ -10,7 +10,7 @@ import com.example.finalprojectufaz.databinding.ItemPlaylistListBinding
 import com.example.finalprojectufaz.domain.playlist.PlaylistDTO
 
 
-class PlaylistAdapter(private val nav: (PlaylistDTO)->Unit = {}): RecyclerView.Adapter<PlaylistAdapter.ViewHolder>() {
+class PlaylistAdapter(private val nav: (PlaylistDTO)->Unit = {},private val handleBottomSheet: (Int)->Unit ={}): RecyclerView.Adapter<PlaylistAdapter.ViewHolder>() {
 
     private val selectedPlaylist = mutableListOf<Int>()
 
@@ -59,6 +59,23 @@ class PlaylistAdapter(private val nav: (PlaylistDTO)->Unit = {}): RecyclerView.A
                 binding.txtCount.text =item.total.toString()
                 itemView.setOnClickListener {
                     nav(item)
+                }
+                itemView.setOnLongClickListener {
+                    itemView.animate()
+                        .scaleX(0.8f)
+                        .scaleY(0.8f)
+                        .setDuration(300)
+                        .withEndAction{
+                            itemView.animate()
+                                .scaleX(1f)
+                                .scaleY(1f)
+                                .setDuration(300)
+                                .start()
+                        }
+                        .start()
+                    handleBottomSheet(item.id)
+
+                    true
                 }
             }
 

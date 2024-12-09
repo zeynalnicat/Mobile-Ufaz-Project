@@ -1,5 +1,6 @@
 package com.example.finalprojectufaz.ui.single_playlist.view_model
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,7 @@ import com.example.finalprojectufaz.data.remote.ApiService
 import com.example.finalprojectufaz.data.remote.RetrofitInstance
 import com.example.finalprojectufaz.domain.core.Resource
 import com.example.finalprojectufaz.domain.track.TrackResponseModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class SinglePlaylistViewModel(private val dao:PlaylistDao):ViewModel() {
@@ -17,16 +19,12 @@ class SinglePlaylistViewModel(private val dao:PlaylistDao):ViewModel() {
 
     private val _tracks = MutableLiveData<Resource<List<TrackResponseModel>>>()
 
-    private val _cacheTracks = MutableLiveData<List<TrackResponseModel>>()
 
     val tracks : LiveData<Resource<List<TrackResponseModel>>> get()=_tracks
 
 
     fun fetchTracks(id:Int){
-        if(!_cacheTracks.value.isNullOrEmpty()){
-            _tracks.postValue(Resource.Success(_cacheTracks.value!!))
-            return
-        }
+
         _tracks.postValue(Resource.Loading)
         viewModelScope.launch {
             try {
@@ -42,7 +40,6 @@ class SinglePlaylistViewModel(private val dao:PlaylistDao):ViewModel() {
                             }
                         }
                     }
-                    _cacheTracks.postValue(listTracks)
                     _tracks.postValue(Resource.Success(listTracks))
 
                 }
@@ -50,6 +47,18 @@ class SinglePlaylistViewModel(private val dao:PlaylistDao):ViewModel() {
                 _tracks.postValue(Resource.Error(e))
             }
 
+        }
+    }
+
+
+    fun removeTrack(trackId:Int,playlistId:Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                dao.delete(playlistId,trackId)
+                fetchTracks(playlistId)
+            }catch (e:Exception){
+               Log.e("Error",e.message.toString())
+            }
         }
     }
 }

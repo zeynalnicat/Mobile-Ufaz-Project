@@ -14,15 +14,20 @@ import com.example.finalprojectufaz.MainActivity
 import com.example.finalprojectufaz.R
 import com.example.finalprojectufaz.data.local.playlist.PlaylistDao
 import com.example.finalprojectufaz.data.local.playlist.RoomDB
+import com.example.finalprojectufaz.databinding.BottomSheetPlaylistBinding
 import com.example.finalprojectufaz.databinding.FragmentSinglePlaylistBinding
+import com.example.finalprojectufaz.databinding.LayoutBottomSheetBinding
 import com.example.finalprojectufaz.domain.album.Artist
 import com.example.finalprojectufaz.domain.album.Data
 import com.example.finalprojectufaz.domain.core.Resource
+import com.example.finalprojectufaz.domain.playlist.PlaylistDTO
 import com.example.finalprojectufaz.domain.track.TrackResponseModel
 import com.example.finalprojectufaz.ui.album_detail.adapters.AlbumDetailsAdapter
+import com.example.finalprojectufaz.ui.playlist.adapters.PlaylistAdapter
 import com.example.finalprojectufaz.ui.single_playlist.factory.SinglePlaylistFactory
 import com.example.finalprojectufaz.ui.single_playlist.view_model.SinglePlaylistViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 
 class SinglePlaylistFragment : Fragment() {
@@ -70,7 +75,7 @@ class SinglePlaylistFragment : Fragment() {
     private fun setAdapter(data: List<TrackResponseModel>) {
         val trackModel = data.map { Data(artist = Artist(id = it.artist?.id ?:0, name = it.artist?.name?:""), duration = it.duration, id = it.id.toInt()
             , preview = it.preview, title = it.title, type = it.type, img = it.album.cover) }
-        val adapter = AlbumDetailsAdapter()
+        val adapter = AlbumDetailsAdapter{handleBottomSheet(it)}
         adapter.submitList(trackModel)
         binding.recyclerView.layoutManager = GridLayoutManager(requireContext(),1)
         binding.recyclerView.adapter = adapter
@@ -81,6 +86,23 @@ class SinglePlaylistFragment : Fragment() {
             findNavController().popBackStack()
         }
     }
+
+    private fun handleBottomSheet(trackId:Int){
+        val dialog = BottomSheetDialog(requireContext())
+        val view = BottomSheetPlaylistBinding.inflate(layoutInflater)
+        dialog.setCancelable(true)
+        dialog.setContentView(view.root)
+
+        view.viewRemove.setOnClickListener {
+            viewModel.removeTrack(trackId,playlistId!!.toInt())
+            viewModel.fetchTracks(playlistId!!)
+            dialog.dismiss()
+
+        }
+
+        dialog.show()
+    }
+
 
 
     private fun animBottom(){

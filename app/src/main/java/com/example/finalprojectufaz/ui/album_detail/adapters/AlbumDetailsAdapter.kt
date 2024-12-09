@@ -12,7 +12,7 @@ import com.example.finalprojectufaz.domain.nav.TrackNavModel
 
 
 
-class AlbumDetailsAdapter(private val img:String="",private val addToPlaylist: (Int)->Unit = {}):RecyclerView.Adapter<AlbumDetailsAdapter.ViewHolder>() {
+class AlbumDetailsAdapter(private val img:String="",private val action: (Int)->Unit = {}):RecyclerView.Adapter<AlbumDetailsAdapter.ViewHolder>() {
     private var navTo : (TrackNavModel)->Unit = {}
     private val callBack = object: DiffUtil.ItemCallback<Data>(){
         override fun areItemsTheSame(oldItem: Data, newItem: Data): Boolean {
@@ -54,7 +54,7 @@ class AlbumDetailsAdapter(private val img:String="",private val addToPlaylist: (
 
 
             binding.btnMore.setOnClickListener {
-                addToPlaylist(track.id)
+                action(track.id)
             }
             binding.txtTrackName.text = track.title
             itemView.setOnClickListener {
