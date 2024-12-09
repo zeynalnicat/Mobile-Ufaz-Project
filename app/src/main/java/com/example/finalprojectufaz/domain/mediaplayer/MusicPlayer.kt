@@ -45,6 +45,9 @@ class MusicPlayer {
     fun pauseMusic() {
         mPlayer?.pause()
     }
+    fun seekTo(position: Int) {
+        mPlayer?.seekTo(position)
+    }
 
     fun getCurrentPosition(): Int {
         return mPlayer?.currentPosition ?: 0

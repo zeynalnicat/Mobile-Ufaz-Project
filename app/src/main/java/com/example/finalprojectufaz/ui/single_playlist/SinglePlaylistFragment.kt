@@ -75,7 +75,8 @@ class SinglePlaylistFragment : Fragment() {
     private fun setAdapter(data: List<TrackResponseModel>) {
         val trackModel = data.map { Data(artist = Artist(id = it.artist?.id ?:0, name = it.artist?.name?:""), duration = it.duration, id = it.id.toInt()
             , preview = it.preview, title = it.title, type = it.type, img = it.album.cover) }
-        val adapter = AlbumDetailsAdapter{handleBottomSheet(it)}
+        val adapter = AlbumDetailsAdapter(action = {handleBottomSheet(it)})
+        adapter.setNavFunction { SinglePlaylistFragmentDirections.actionSinglePlaylistToDetailsFragment(it) }
         adapter.submitList(trackModel)
         binding.recyclerView.layoutManager = GridLayoutManager(requireContext(),1)
         binding.recyclerView.adapter = adapter

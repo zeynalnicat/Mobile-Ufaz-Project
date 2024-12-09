@@ -56,6 +56,7 @@ class DetailsFragment : Fragment() {
         mainActivity.hideBottomNav(true)
         setLayout()
         setupListeners()
+        setupSeekBar()
         nav()
         handleBottomSheet(trackId!!)
         return binding.root
@@ -116,6 +117,17 @@ class DetailsFragment : Fragment() {
         }
     }
 
+    private fun setupSeekBar() {
+        binding.progressBar.setOnTouchListener { _, event ->
+            if (event.action == android.view.MotionEvent.ACTION_DOWN || event.action == android.view.MotionEvent.ACTION_MOVE) {
+                val newPosition = (event.x / binding.progressBar.width) * MusicPlayer.getInstance().getDuration()
+                MusicPlayer.getInstance().seekTo(newPosition.toInt())
+                binding.progressBar.progress = newPosition.toInt()
+            }
+            true
+        }
+    }
+
     private fun startProgressBar() {
         handler.post(object : Runnable {
             override fun run() {
@@ -156,7 +168,15 @@ class DetailsFragment : Fragment() {
             .load(track.img)
             .into(binding.imgTrack)
 
+        startNewTrack()
 
+    }
+    private fun startNewTrack() {
+        MusicPlayer.getInstance().stopMusic()
+        MusicPlayer.getInstance().startMusic(requireContext(), trackUri)
+        startProgressBar()
+        binding.btnPlay.setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.icon_pause))
+        isPlaying = true
     }
 
     private fun stopProgressBarUpdates() {

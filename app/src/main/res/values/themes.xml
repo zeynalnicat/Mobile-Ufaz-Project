@@ -7,5 +7,9 @@
     <style name="Theme.FinalProjectUfaz" parent="Base.Theme.FinalProjectUfaz" >
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:fontFamily">@font/avenir_next_regular</item>
+    </style>
+    <style name="BoldText">
+        <item name="android:fontFamily">@font/avenir_next_bold</item>
     </style>
 </resources>

@@ -6,6 +6,7 @@
     <color name="primary">#0D090A</color>
     <color name="iconColor">#8E8E8E</color>
     <color name="darkBlue">#0A071E</color>
+    <color name="blueAccent">#1565C0</color>
     <color name="input_gray">#777777</color>
     <color name="spotifyGreen">#1ED760</color>
     <color name="orange">#C54917</color>

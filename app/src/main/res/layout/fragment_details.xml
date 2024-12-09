@@ -65,6 +65,7 @@
     <TextView
         android:id="@+id/txtTrackName"
         android:layout_width="0dp"
+        style="@style/BoldText"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:text="Track Name"
