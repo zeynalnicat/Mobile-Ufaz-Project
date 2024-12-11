@@ -23,6 +23,7 @@ import com.example.finalprojectufaz.databinding.FragmentDetailsBinding
 import com.example.finalprojectufaz.databinding.LayoutBottomSheetBinding
 import com.example.finalprojectufaz.domain.core.Resource
 import com.example.finalprojectufaz.domain.mediaplayer.MusicPlayer
+import com.example.finalprojectufaz.domain.nav.TrackNavModel
 import com.example.finalprojectufaz.domain.playlist.PlaylistDTO
 import com.example.finalprojectufaz.ui.playlist.adapters.PlaylistAdapter
 import com.example.finalprojectufaz.ui.playlist.factory.PlaylistFactory
@@ -58,11 +59,11 @@ class DetailsFragment : Fragment() {
         setupListeners()
         setupSeekBar()
         nav()
-        handleBottomSheet(trackId!!)
+        handleBottomSheet(args.track)
         return binding.root
     }
 
-    private fun handleBottomSheet(trackId:Int){
+    private fun handleBottomSheet(trackNavModel: TrackNavModel){
         binding.btnMore.setOnClickListener {
             pViewModel.getPlaylists()
             val dialog = BottomSheetDialog(requireContext())
@@ -86,7 +87,8 @@ class DetailsFragment : Fragment() {
 
             view.btnAdd.setOnClickListener {
                 val ids = pAdapter.getSelected()
-                pViewModel.addToPlaylists(trackId,ids)
+                pViewModel.addToPlaylists(trackId!!,ids)
+                pViewModel.addToQuiz(ids,trackNavModel)
                 dialog.dismiss()
             }
 

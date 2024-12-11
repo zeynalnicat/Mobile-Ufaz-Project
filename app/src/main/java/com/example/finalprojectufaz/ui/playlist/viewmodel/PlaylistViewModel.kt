@@ -9,6 +9,7 @@ import com.example.finalprojectufaz.data.local.playlist.PlaylistEntity
 import com.example.finalprojectufaz.data.local.playlist.TrackEntity
 import com.example.finalprojectufaz.data.local.quiz.QuizDao
 import com.example.finalprojectufaz.data.local.quiz.QuizDetailEntity
+import com.example.finalprojectufaz.data.local.quiz.QuizEntity
 import com.example.finalprojectufaz.domain.core.Resource
 import com.example.finalprojectufaz.domain.nav.TrackNavModel
 import com.example.finalprojectufaz.domain.playlist.PlaylistDTO
@@ -28,7 +29,10 @@ val quizDao: QuizDao):ViewModel() {
 
     fun insert(name:String){
         viewModelScope.launch(Dispatchers.IO) {
-            dao.addPlaylist(PlaylistEntity(0,name))
+           val id =  dao.addPlaylist(PlaylistEntity(0,name))
+           if(id!=-1L){
+               quizDao.insertQuiz(QuizEntity(0,id.toInt(),null,null,false))
+           }
         }
     }
 

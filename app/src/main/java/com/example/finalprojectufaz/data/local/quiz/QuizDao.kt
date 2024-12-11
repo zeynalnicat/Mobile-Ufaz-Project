@@ -25,4 +25,5 @@ interface QuizDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSingleQuiz(quizDetailEntity: QuizDetailEntity):Long
+
 }

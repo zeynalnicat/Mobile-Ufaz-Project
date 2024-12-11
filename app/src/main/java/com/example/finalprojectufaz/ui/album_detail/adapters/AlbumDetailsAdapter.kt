@@ -59,7 +59,6 @@ class AlbumDetailsAdapter(private val img:String="",private val action: (TrackNa
             }
             binding.txtTrackName.text = track.title
             itemView.setOnClickListener {
-
                 navTo(trck)
             }
         }
