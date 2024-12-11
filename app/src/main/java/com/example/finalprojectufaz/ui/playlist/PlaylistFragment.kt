@@ -5,20 +5,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.helper.widget.Grid
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.room.Room
 import com.example.finalprojectufaz.R
 import com.example.finalprojectufaz.data.local.playlist.PlaylistDao
-import com.example.finalprojectufaz.data.local.playlist.PlaylistEntity
-import com.example.finalprojectufaz.data.local.playlist.RoomDB
+import com.example.finalprojectufaz.data.local.RoomDB
+import com.example.finalprojectufaz.data.local.quiz.QuizDao
 import com.example.finalprojectufaz.databinding.BottomSheetPlaylistBinding
 import com.example.finalprojectufaz.databinding.FragmentPlaylistBinding
-import com.example.finalprojectufaz.databinding.LayoutBottomSheetBinding
 import com.example.finalprojectufaz.domain.core.Resource
-import com.example.finalprojectufaz.domain.mocks.MockPlaylist
 import com.example.finalprojectufaz.domain.playlist.PlaylistDTO
 import com.example.finalprojectufaz.ui.playlist.adapters.PlaylistAdapter
 import com.example.finalprojectufaz.ui.playlist.factory.PlaylistFactory
@@ -33,7 +29,8 @@ class PlaylistFragment : Fragment() {
     private var isBottomNavVisible = true
     private lateinit var adapter: PlaylistAdapter
     private lateinit var dao: PlaylistDao
-    private val viewModel:PlaylistViewModel by viewModels {PlaylistFactory(dao)}
+    private lateinit var quizDao: QuizDao
+    private val viewModel:PlaylistViewModel by viewModels {PlaylistFactory(dao,quizDao)}
     private var scrollY = 0
 
 
@@ -43,7 +40,9 @@ class PlaylistFragment : Fragment() {
     ): View? {
         adapter = PlaylistAdapter({data -> setAdapterNavigation(data)},{handleBottomSheet(it)})
         binding = FragmentPlaylistBinding.inflate(layoutInflater)
-        dao = RoomDB.accessDB(requireContext())?.playlistDao()!!
+        val roomDB = RoomDB.accessDB(requireContext())!!
+        dao =roomDB.playlistDao()
+        quizDao= roomDB.quizDao()
         animBottom()
         setNavigation()
         return binding.root

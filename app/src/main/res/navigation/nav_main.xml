@@ -17,7 +17,11 @@
         android:id="@+id/quizFragment"
         android:name="com.example.finalprojectufaz.ui.quiz.QuizFragment"
         android:label="fragment_quiz"
-        tools:layout="@layout/fragment_quiz" />
+        tools:layout="@layout/fragment_quiz" >
+        <action
+            android:id="@+id/action_quizFragment_to_singleQuiz"
+            app:destination="@id/singleQuiz" />
+    </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.finalprojectufaz.ui.search.SearchFragment"
@@ -73,5 +77,11 @@
             android:id="@+id/action_singlePlaylist_to_detailsFragment"
             app:destination="@id/detailsFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/singleQuiz"
+        android:name="com.example.finalprojectufaz.ui.quiz.QuizFragment"
+        android:label="fragment_single_quiz"
+        tools:layout="@layout/fragment_single_quiz"/>
 
 </navigation>

@@ -1,7 +1,6 @@
 package com.example.finalprojectufaz.ui.single_playlist
 
 import android.os.Bundle
-import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,17 +12,16 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.finalprojectufaz.MainActivity
 import com.example.finalprojectufaz.R
 import com.example.finalprojectufaz.data.local.playlist.PlaylistDao
-import com.example.finalprojectufaz.data.local.playlist.RoomDB
+import com.example.finalprojectufaz.data.local.RoomDB
+import com.example.finalprojectufaz.data.local.quiz.QuizDao
 import com.example.finalprojectufaz.databinding.BottomSheetPlaylistBinding
 import com.example.finalprojectufaz.databinding.FragmentSinglePlaylistBinding
-import com.example.finalprojectufaz.databinding.LayoutBottomSheetBinding
 import com.example.finalprojectufaz.domain.album.Artist
 import com.example.finalprojectufaz.domain.album.Data
 import com.example.finalprojectufaz.domain.core.Resource
-import com.example.finalprojectufaz.domain.playlist.PlaylistDTO
+import com.example.finalprojectufaz.domain.nav.TrackNavModel
 import com.example.finalprojectufaz.domain.track.TrackResponseModel
 import com.example.finalprojectufaz.ui.album_detail.adapters.AlbumDetailsAdapter
-import com.example.finalprojectufaz.ui.playlist.adapters.PlaylistAdapter
 import com.example.finalprojectufaz.ui.single_playlist.factory.SinglePlaylistFactory
 import com.example.finalprojectufaz.ui.single_playlist.view_model.SinglePlaylistViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -37,7 +35,8 @@ class SinglePlaylistFragment : Fragment() {
     private var isBottomNavVisible = true
     private val args:SinglePlaylistFragmentArgs by navArgs()
     private lateinit var dao: PlaylistDao
-    private val viewModel:SinglePlaylistViewModel by viewModels { SinglePlaylistFactory(dao) }
+    private lateinit var quizDao: QuizDao
+    private val viewModel:SinglePlaylistViewModel by viewModels { SinglePlaylistFactory(dao,quizDao) }
     private var playlistId : Int? = null
     private var scrollY = 0
 
@@ -50,7 +49,9 @@ class SinglePlaylistFragment : Fragment() {
         mActivity = requireActivity() as MainActivity
         playlistId = args.playlist.id
         binding.txtPlaylistName.text = args.playlist.name
-        dao = RoomDB.accessDB(requireContext())?.playlistDao()!!
+        val roomDb = RoomDB.accessDB(requireContext())!!
+        dao = roomDb.playlistDao()
+        quizDao = roomDb.quizDao()
         setNavigation()
         animBottom()
         return binding.root
@@ -70,12 +71,13 @@ class SinglePlaylistFragment : Fragment() {
         })
 
         viewModel.fetchTracks(playlistId!!)
+        viewModel.quizExist(playlistId!!)
     }
 
     private fun setAdapter(data: List<TrackResponseModel>) {
         val trackModel = data.map { Data(artist = Artist(id = it.artist?.id ?:0, name = it.artist?.name?:""), duration = it.duration, id = it.id.toInt()
             , preview = it.preview, title = it.title, type = it.type, img = it.album.cover) }
-        val adapter = AlbumDetailsAdapter(action = {handleBottomSheet(it)})
+        val adapter = AlbumDetailsAdapter(action = {track -> handleBottomSheet(track)})
         adapter.setNavFunction { SinglePlaylistFragmentDirections.actionSinglePlaylistToDetailsFragment(it) }
         adapter.submitList(trackModel)
         binding.recyclerView.layoutManager = GridLayoutManager(requireContext(),1)
@@ -88,14 +90,14 @@ class SinglePlaylistFragment : Fragment() {
         }
     }
 
-    private fun handleBottomSheet(trackId:Int){
+    private fun handleBottomSheet(trackNavModel: TrackNavModel){
         val dialog = BottomSheetDialog(requireContext())
         val view = BottomSheetPlaylistBinding.inflate(layoutInflater)
         dialog.setCancelable(true)
         dialog.setContentView(view.root)
 
         view.viewRemove.setOnClickListener {
-            viewModel.removeTrack(trackId,playlistId!!.toInt())
+            viewModel.removeTrack(trackNavModel.id.toInt(),playlistId!!.toInt())
             viewModel.fetchTracks(playlistId!!)
             dialog.dismiss()
 

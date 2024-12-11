@@ -12,7 +12,7 @@ import com.example.finalprojectufaz.domain.nav.TrackNavModel
 
 
 
-class AlbumDetailsAdapter(private val img:String="",private val action: (Int)->Unit = {}):RecyclerView.Adapter<AlbumDetailsAdapter.ViewHolder>() {
+class AlbumDetailsAdapter(private val img:String="",private val action: (TrackNavModel)->Unit = {}):RecyclerView.Adapter<AlbumDetailsAdapter.ViewHolder>() {
     private var navTo : (TrackNavModel)->Unit = {}
     private val callBack = object: DiffUtil.ItemCallback<Data>(){
         override fun areItemsTheSame(oldItem: Data, newItem: Data): Boolean {
@@ -41,6 +41,7 @@ class AlbumDetailsAdapter(private val img:String="",private val action: (Int)->U
 
     inner class ViewHolder(private val binding:ItemAlbumTrackBinding):RecyclerView.ViewHolder(binding.root){
         fun bind(track:Data){
+            val trck = TrackNavModel(id = track.id.toLong(),img=img, title = track.title,track.artist.name,track.preview,track.duration)
             if(track.img==null){
                 Glide.with(itemView)
                     .load(img)
@@ -54,11 +55,11 @@ class AlbumDetailsAdapter(private val img:String="",private val action: (Int)->U
 
 
             binding.btnMore.setOnClickListener {
-                action(track.id)
+                action(trck)
             }
             binding.txtTrackName.text = track.title
             itemView.setOnClickListener {
-                val trck = TrackNavModel(id = track.id.toLong(),img=img, title = track.title,track.artist.name,track.preview,track.duration)
+
                 navTo(trck)
             }
         }

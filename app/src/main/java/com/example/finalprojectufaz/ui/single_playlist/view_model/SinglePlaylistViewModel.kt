@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.finalprojectufaz.data.local.playlist.PlaylistDao
+import com.example.finalprojectufaz.data.local.quiz.QuizDao
+import com.example.finalprojectufaz.data.local.quiz.QuizEntity
 import com.example.finalprojectufaz.data.remote.ApiService
 import com.example.finalprojectufaz.data.remote.RetrofitInstance
 import com.example.finalprojectufaz.domain.core.Resource
@@ -13,7 +15,7 @@ import com.example.finalprojectufaz.domain.track.TrackResponseModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class SinglePlaylistViewModel(private val dao:PlaylistDao):ViewModel() {
+class SinglePlaylistViewModel(private val dao:PlaylistDao,private val quizDao: QuizDao):ViewModel() {
 
     private val apiService = RetrofitInstance.getInstance().create(ApiService::class.java)
 
@@ -21,6 +23,23 @@ class SinglePlaylistViewModel(private val dao:PlaylistDao):ViewModel() {
 
 
     val tracks : LiveData<Resource<List<TrackResponseModel>>> get()=_tracks
+
+
+    fun quizExist(playlistId: Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            val count = quizDao.count(playlistId)
+
+            if(count>0){
+
+            }
+            else{
+                val entity = QuizEntity(0,playlistId,null,null,false)
+                quizDao.insertQuiz(entity)
+            }
+        }
+    }
+
+
 
 
     fun fetchTracks(id:Int){

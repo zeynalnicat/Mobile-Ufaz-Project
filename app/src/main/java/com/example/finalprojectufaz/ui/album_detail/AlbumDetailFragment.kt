@@ -5,25 +5,22 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.helper.widget.Grid
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.example.finalprojectufaz.R
 import com.example.finalprojectufaz.data.local.playlist.PlaylistDao
-import com.example.finalprojectufaz.data.local.playlist.RoomDB
+import com.example.finalprojectufaz.data.local.RoomDB
+import com.example.finalprojectufaz.data.local.quiz.QuizDao
 import com.example.finalprojectufaz.data.utils.Utils
 import com.example.finalprojectufaz.databinding.FragmentAlbumDetailBinding
 import com.example.finalprojectufaz.databinding.LayoutBottomSheetBinding
 import com.example.finalprojectufaz.domain.album.Data
 import com.example.finalprojectufaz.domain.core.Resource
-import com.example.finalprojectufaz.domain.mocks.MockAlbum
-import com.example.finalprojectufaz.domain.mocks.MockTrack
+import com.example.finalprojectufaz.domain.nav.TrackNavModel
 import com.example.finalprojectufaz.domain.playlist.PlaylistDTO
-import com.example.finalprojectufaz.domain.track.TrackResponseModel
 import com.example.finalprojectufaz.ui.album_detail.adapters.AlbumDetailsAdapter
 import com.example.finalprojectufaz.ui.album_detail.viewmodel.AlbumDetailsViewModel
 import com.example.finalprojectufaz.ui.playlist.adapters.PlaylistAdapter
@@ -44,7 +41,8 @@ class AlbumDetailFragment : Fragment() {
     private var scrollY = 0
     private val viewModel : AlbumDetailsViewModel by viewModels()
     private lateinit var dao: PlaylistDao
-    private val pViewModel: PlaylistViewModel by viewModels { PlaylistFactory(dao) }
+    private lateinit var quizDao: QuizDao
+    private val pViewModel: PlaylistViewModel by viewModels { PlaylistFactory(dao,quizDao) }
 
 
     override fun onCreateView(
@@ -52,9 +50,11 @@ class AlbumDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentAlbumDetailBinding.inflate(layoutInflater)
-        dao = RoomDB.accessDB(requireContext())?.playlistDao()!!
+        val roomDB = RoomDB.accessDB(requireContext())!!
+        dao = roomDB.playlistDao()
+        quizDao = roomDB.quizDao()
         setLayout()
-        adapter = AlbumDetailsAdapter(imgUri,{trackId -> handleBottomSheet(trackId)})
+        adapter = AlbumDetailsAdapter(imgUri,{track -> handleBottomSheet(track)})
         animBottom()
         setNavigation()
         return binding.root
@@ -117,7 +117,7 @@ class AlbumDetailFragment : Fragment() {
 
     }
 
-    private fun handleBottomSheet(trackId:Int){
+    private fun handleBottomSheet(trackNavModel: TrackNavModel){
             pViewModel.getPlaylists()
             val dialog = BottomSheetDialog(requireContext())
             val view = LayoutBottomSheetBinding.inflate(layoutInflater)
@@ -141,7 +141,8 @@ class AlbumDetailFragment : Fragment() {
 
             view.btnAdd.setOnClickListener {
                 val ids = pAdapter.getSelected()
-                pViewModel.addToPlaylists(trackId,ids)
+                pViewModel.addToPlaylists(trackNavModel.id.toInt(),ids)
+                pViewModel.addToQuiz(playlistIds = ids,trackNavModel)
                 dialog.dismiss()
             }
 
