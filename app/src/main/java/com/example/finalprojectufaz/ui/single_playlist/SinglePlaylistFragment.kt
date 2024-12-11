@@ -1,11 +1,13 @@
 package com.example.finalprojectufaz.ui.single_playlist
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -58,6 +60,21 @@ class SinglePlaylistFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.btnQuiz.setOnClickListener {
+            val resource = viewModel.tracks.value
+            if (resource is Resource.Success) {
+                val tracks = resource.data
+                if (!tracks.isNullOrEmpty()) {
+                    // Pass tracks as Serializable
+                    val action = SinglePlaylistFragmentDirections.actionSinglePlaylistToQuizFragment(tracks.toTypedArray())
+                    findNavController().navigate(action)
+                } else {
+                    Toast.makeText(requireContext(), "No tracks available for the quiz", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(requireContext(), "Tracks are still loading. Please wait.", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         viewModel.tracks.observe(viewLifecycleOwner,{
             when(it){
@@ -73,12 +90,21 @@ class SinglePlaylistFragment : Fragment() {
     }
 
     private fun setAdapter(data: List<TrackResponseModel>) {
-        val trackModel = data.map { Data(artist = Artist(id = it.artist?.id ?:0, name = it.artist?.name?:""), duration = it.duration, id = it.id.toInt()
-            , preview = it.preview, title = it.title, type = it.type, img = it.album.cover) }
-        val adapter = AlbumDetailsAdapter(action = {handleBottomSheet(it)})
+        val trackModel = data.map {
+            Data(
+                artist = Artist(id = it.artist?.id ?: 0, name = it.artist?.name ?: ""),
+                duration = it.duration,
+                id = it.id.toInt(),
+                preview = it.preview,
+                title = it.title,
+                type = it.type,
+                img = it.album.cover
+            )
+        }
+        val adapter = AlbumDetailsAdapter(action = { handleBottomSheet(it) })
         adapter.setNavFunction { SinglePlaylistFragmentDirections.actionSinglePlaylistToDetailsFragment(it) }
         adapter.submitList(trackModel)
-        binding.recyclerView.layoutManager = GridLayoutManager(requireContext(),1)
+        binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 1)
         binding.recyclerView.adapter = adapter
     }
 

@@ -2,6 +2,7 @@ package com.example.finalprojectufaz.domain.album
 
 import com.example.finalprojectufaz.domain.ResponseModel
 import com.example.finalprojectufaz.domain.track.Artist
+import java.io.Serializable
 
 data class AlbumResponseModel(
     val artist: Artist?=null,
@@ -14,4 +15,4 @@ data class AlbumResponseModel(
     val release_date: String ="",
     val title: String,
     val tracklist: String
-):ResponseModel()
+):Serializable , ResponseModel()

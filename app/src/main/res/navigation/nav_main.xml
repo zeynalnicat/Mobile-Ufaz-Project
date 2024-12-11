@@ -16,8 +16,12 @@
     <fragment
         android:id="@+id/quizFragment"
         android:name="com.example.finalprojectufaz.ui.quiz.QuizFragment"
-        android:label="fragment_quiz"
-        tools:layout="@layout/fragment_quiz" />
+        android:label="Quiz"
+        tools:layout="@layout/fragment_quiz">
+        <argument
+            android:name="tracks"
+            app:argType="serializable" />
+    </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.finalprojectufaz.ui.search.SearchFragment"
@@ -35,6 +39,7 @@
         android:name="com.example.finalprojectufaz.ui.playlist.PlaylistFragment"
         android:label="fragment_playlist"
         tools:layout="@layout/fragment_playlist" >
+
         <action
             android:id="@+id/action_playlistFragment_to_newPlaylist"
             app:destination="@id/newPlaylist" />
@@ -66,12 +71,23 @@
         android:name="com.example.finalprojectufaz.ui.single_playlist.SinglePlaylistFragment"
         android:label="fragment_single_playlist"
         tools:layout="@layout/fragment_single_playlist">
+        <action
+            android:id="@+id/action_playlistFragment_to_quizFragment"
+            app:destination="@id/quizFragment" />
         <argument
             android:name="playlist"
             app:argType="com.example.finalprojectufaz.domain.playlist.PlaylistDTO" />
         <action
             android:id="@+id/action_singlePlaylist_to_detailsFragment"
             app:destination="@id/detailsFragment" />
+        <action
+            android:id="@+id/actionSinglePlaylistToQuizFragment"
+            app:destination="@id/quizFragment">
+            <argument
+                android:name="tracks"
+                app:argType="com.example.finalprojectufaz.domain.track.TrackResponseModel[]"
+                app:nullable="false" />
+        </action>
     </fragment>
 
 </navigation>
