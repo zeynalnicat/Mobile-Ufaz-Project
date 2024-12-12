@@ -16,8 +16,6 @@ import com.example.finalprojectufaz.databinding.FragmentSearchBinding
 import com.example.finalprojectufaz.domain.ChipState
 import com.example.finalprojectufaz.domain.ResponseModel
 import com.example.finalprojectufaz.domain.core.Resource
-import com.example.finalprojectufaz.domain.nav.TrackNavModel
-import com.example.finalprojectufaz.domain.track.TrackResponseModel
 import com.example.finalprojectufaz.ui.search.adapters.TracksListAdapter
 import com.example.finalprojectufaz.ui.search.viewmodel.SearchViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
