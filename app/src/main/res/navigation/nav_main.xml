@@ -80,8 +80,27 @@
 
     <fragment
         android:id="@+id/singleQuiz"
-        android:name="com.example.finalprojectufaz.ui.quiz.QuizFragment"
+        android:name="com.example.finalprojectufaz.ui.single_quiz.SingleQuizFragment"
         android:label="fragment_single_quiz"
-        tools:layout="@layout/fragment_single_quiz"/>
+        tools:layout="@layout/fragment_single_quiz">
+        <argument
+            android:name="id"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_singleQuiz_to_quizResultFragment"
+            app:destination="@id/quizResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/quizResultFragment"
+        android:name="com.example.finalprojectufaz.ui.quiz.QuizResultFragment"
+        android:label="fragment_quiz_result"
+        tools:layout="@layout/fragment_quiz_result" >
+        <argument
+            android:name="id"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_quizResultFragment_to_quizFragment"
+            app:destination="@id/quizFragment" />
+    </fragment>
 
 </navigation>

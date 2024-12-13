@@ -11,5 +11,6 @@
     <color name="quizGreen">#004643</color>
     <color name="spotifyGreen">#1ED760</color>
     <color name="orange">#C54917</color>
+    <color name="red">#550C18</color>
     <color name="txtColor">#BCBBBB</color>
 </resources>

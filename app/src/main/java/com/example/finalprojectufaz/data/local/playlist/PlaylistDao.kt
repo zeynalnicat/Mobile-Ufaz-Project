@@ -28,4 +28,8 @@ interface PlaylistDao {
 
     @Query("Delete from playlists where id=:playlistId")
     suspend fun removePlaylist(playlistId:Int)
+
+    @Query("Select name from playlists where id=:id")
+    suspend fun getName(id:Int):String
+
 }

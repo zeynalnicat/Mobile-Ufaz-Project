@@ -7,5 +7,5 @@ data class QuizDTO(
     val isCompleted: Boolean? = false,
     val wrongAnswers: Int? = null,
     val correctAnswers: Int? = null,
-    val quizzes : List<SingleQuizModel>? = null
+    val numberOfQuestions: Int? =null
 )

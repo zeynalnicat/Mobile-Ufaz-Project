@@ -1,16 +1,22 @@
-package com.example.finalprojectufaz.ui.quiz
+package com.example.finalprojectufaz.ui.quiz.adapter
 
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.finalprojectufaz.R
 import com.example.finalprojectufaz.databinding.ItemQuizListBinding
 import com.example.finalprojectufaz.domain.quiz.QuizDTO
 
-class QuizAdapter:RecyclerView.Adapter<QuizAdapter.ViewHolder>() {
+class QuizAdapter(private val action:ActionCallBack):RecyclerView.Adapter<QuizAdapter.ViewHolder>() {
+
+    interface ActionCallBack{
+        fun nav(id:Int)
+    }
     private val callBack = object: DiffUtil.ItemCallback<QuizDTO>(){
         override fun areItemsTheSame(oldItem: QuizDTO, newItem: QuizDTO): Boolean {
             return oldItem===newItem
@@ -22,8 +28,6 @@ class QuizAdapter:RecyclerView.Adapter<QuizAdapter.ViewHolder>() {
     }
 
     private val diffUtil = AsyncListDiffer(this,callBack)
-
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = ItemQuizListBinding.inflate(LayoutInflater.from(parent.context),parent,false)
@@ -42,13 +46,23 @@ class QuizAdapter:RecyclerView.Adapter<QuizAdapter.ViewHolder>() {
         fun bind(quiz: QuizDTO){
             binding.txtQuizName.text = "Quiz #${layoutPosition}"
             binding.txtPlaylistName.text = quiz.playlistName
+            binding.txtCount.text = "${quiz.numberOfQuestions} Questions"
             if(quiz.isCompleted==null || !quiz.isCompleted){
                 binding.txtCompletion.visibility = View.GONE
+                binding.txtWrong.visibility = View.GONE
+                binding.txtNumberCorrect.visibility= View.GONE
+                binding.txtNumberWrong.visibility = View.GONE
+                binding.txtCorrect.visibility = View.GONE
             }else{
                 binding.txtCompletion.text = "Completed"
+                binding.txtCompletion.setTextColor(ContextCompat.getColor(binding.root.context, R.color.spotifyGreen))
+                binding.txtNumberWrong.text = quiz.wrongAnswers.toString()
+                binding.txtNumberCorrect.text = quiz.correctAnswers.toString()
             }
 
-
+            itemView.setOnClickListener {
+                action.nav(quiz.id)
+            }
 
         }
     }
