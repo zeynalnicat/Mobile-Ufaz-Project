@@ -21,6 +21,9 @@
         <action
             android:id="@+id/action_quizFragment_to_singleQuiz"
             app:destination="@id/singleQuiz" />
+        <action
+            android:id="@+id/action_quizFragment_to_createQuizFragment"
+            app:destination="@id/createQuizFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -102,5 +105,10 @@
             android:id="@+id/action_quizResultFragment_to_quizFragment"
             app:destination="@id/quizFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/createQuizFragment"
+        android:name="com.example.finalprojectufaz.ui.create_quiz.CreateQuizFragment"
+        android:label="CreateQuizFragment"
+        tools:layout="@layout/fragment_create_quiz"/>
 
 </navigation>

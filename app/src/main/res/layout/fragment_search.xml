@@ -25,7 +25,7 @@
             android:textColorHint="@color/txtColor"
             android:inputType="text"
             android:drawableTint="@color/txtColor"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:padding="10dp"
             app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
             app:layout_constraintStart_toStartOf="@+id/leftGuideline"

@@ -45,6 +45,7 @@ class PlaylistFragment : Fragment() {
         quizDao= roomDB.quizDao()
         animBottom()
         setNavigation()
+        viewModel.getPlaylists()
         return binding.root
     }
 
@@ -72,7 +73,7 @@ class PlaylistFragment : Fragment() {
             }
         })
 
-        viewModel.getPlaylists()
+
     }
 
     private fun handleBottomSheet(playlistId:Int){

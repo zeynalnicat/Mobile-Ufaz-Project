@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/layout_color_new_playlist"
-    tools:context=".ui.fragments.playlist.NewPlaylistFragment">
+    >
 
 
     <EditText
@@ -18,7 +18,7 @@
         android:ems="10"
         android:padding="20dp"
         android:selectAllOnFocus="true"
-        android:focusedSearchResultHighlightColor="@color/white"
+        android:focusedSearchResultHighlightColor="@color/txtColor"
         android:text="My playlist"
         android:textColorHighlight="@color/primary"
         app:layout_constraintBottom_toBottomOf="parent"
