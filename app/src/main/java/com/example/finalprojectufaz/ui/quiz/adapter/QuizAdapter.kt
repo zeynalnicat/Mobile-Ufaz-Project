@@ -45,7 +45,7 @@ class QuizAdapter(private val action:ActionCallBack):RecyclerView.Adapter<QuizAd
 
     inner class ViewHolder(private val binding:ItemQuizListBinding):RecyclerView.ViewHolder(binding.root){
         fun bind(quiz: QuizDTO){
-            binding.txtQuizName.text = "Quiz #${layoutPosition}"
+            binding.txtQuizName.text = "Quiz #${layoutPosition+1}"
             binding.txtPlaylistName.text = quiz.name
             binding.txtCount.text = "${quiz.numberOfQuestions} Questions"
             if(quiz.isCompleted==null || !quiz.isCompleted){
