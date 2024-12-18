@@ -55,10 +55,12 @@ class QuizPagerAdapter(
                     actionCallBac.nav()
                     QuizQuestionsModel.wrongAnswers=0
                     QuizQuestionsModel.correctAnswers=0
+                    MusicPlayer.getInstance().stopMusic()
                 }
             }else{
                 binding.btnPrevious.setOnClickListener {
                      actionCallBac.back()
+                    MusicPlayer.getInstance().stopMusic()
                 }
             }
 
@@ -67,10 +69,12 @@ class QuizPagerAdapter(
             }else{
                 binding.btnNext2.setOnClickListener {
                     actionCallBac.next()
+                    MusicPlayer.getInstance().stopMusic()
                 }
             }
 
             binding.btnPlay.setOnClickListener {
+                MusicPlayer.getInstance().stopMusic()
                 isPlaying = !isPlaying
 
                 if (isPlaying) {
@@ -80,10 +84,6 @@ class QuizPagerAdapter(
                         currentTrackUri = uri
                         CoroutineScope(Dispatchers.IO).launch {
                             MusicPlayer.getInstance().startMusic(itemView.context.applicationContext, uri)
-                        }
-                    } else {
-                        CoroutineScope(Dispatchers.IO).launch {
-                            MusicPlayer.getInstance().resumeMusic(itemView.context.applicationContext,uri,MusicPlayer.getInstance().getCurrentPosition())
                         }
                     }
 
@@ -123,12 +123,18 @@ class QuizPagerAdapter(
         private fun startUpdatingProgressBar() {
             updateProgressBarRunnable = object : Runnable {
                 override fun run() {
-                    val currentPosition = MusicPlayer.getInstance().getCurrentPosition()
-                    val maxDuration = MusicPlayer.getInstance().getDuration()
+                    val musicPlayer = MusicPlayer.getInstance()
 
-                    if (maxDuration > 0) {
-                        val progress = (currentPosition * 100) / maxDuration
-                        binding.progressPreview.progress = progress
+                    if (musicPlayer.isPlaying) {
+                        val currentPosition = musicPlayer.getCurrentPosition()
+                        val maxDuration = musicPlayer.getDuration()
+
+                        if (maxDuration > 0) {
+                            val progress = (currentPosition * 100) / maxDuration
+                            binding.progressPreview.progress = progress
+                        } else {
+                            binding.progressPreview.progress = 0
+                        }
                     } else {
                         binding.progressPreview.progress = 0
                     }
@@ -140,6 +146,7 @@ class QuizPagerAdapter(
         }
 
 
+
         private fun stopUpdatingProgressBar() {
             handler.removeCallbacks(updateProgressBarRunnable!!)
         }
@@ -149,6 +156,7 @@ class QuizPagerAdapter(
         }
 
         override fun nav() {
+            MusicPlayer.getInstance().stopMusic()
              actionCallBac.next()
         }
     }

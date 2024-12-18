@@ -84,7 +84,7 @@ class PlaylistFragment : Fragment() {
 
         view.viewRemove.setOnClickListener {
             viewModel.remove(playlistId)
-            viewModel.cachePlaylists.postValue(emptyList())
+            dialog.dismiss()
         }
 
 

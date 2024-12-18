@@ -6,9 +6,12 @@ import android.net.Uri
 
 class MusicPlayer {
      private var mPlayer:MediaPlayer? = null
+    var isPlaying = false
+
 
     companion object {
         private var instance: MusicPlayer? = null
+
         fun getInstance(): MusicPlayer {
             if (instance == null) {
                 instance = MusicPlayer()
@@ -21,7 +24,7 @@ class MusicPlayer {
         val musicPlayer = getInstance()
         musicPlayer.mPlayer?.stop()
         musicPlayer.mPlayer?.release()
-
+        isPlaying = true
         musicPlayer.mPlayer = MediaPlayer().apply {
             try {
                 setDataSource(context, Uri.parse(uri))
@@ -36,6 +39,7 @@ class MusicPlayer {
         getInstance().mPlayer?.let {
             if (it.isPlaying) {
                 it.stop()
+                isPlaying = false
             }
             it.release()
             instance?.mPlayer = null
@@ -59,6 +63,7 @@ class MusicPlayer {
 
     fun resumeMusic(context: Context, uri: String, position: Int) {
         if (mPlayer == null) {
+            isPlaying = true
             mPlayer = MediaPlayer().apply {
                 setDataSource(uri)
                 prepare()

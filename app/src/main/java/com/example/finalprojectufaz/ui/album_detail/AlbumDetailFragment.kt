@@ -140,9 +140,8 @@ class AlbumDetailFragment : Fragment() {
             })
 
             view.btnAdd.setOnClickListener {
-                val ids = pAdapter.getSelected()
+                val ids = pAdapter.getSelected().get("selectedList") as MutableList<Int>
                 pViewModel.addToPlaylists(trackNavModel.id.toInt(),ids)
-                pViewModel.addToQuiz(playlistIds = ids,trackNavModel)
                 dialog.dismiss()
             }
 

@@ -10,12 +10,8 @@ interface QuizDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertQuiz(quizEntity: QuizEntity):Long
+    
 
-    @Query("Select * from quiz where playlistId=:playlistId")
-    suspend fun getQuiz(playlistId:Int):List<QuizEntity>
-
-    @Query("Select Count(*) from quiz where playlistId=:playlistId")
-    suspend fun count(playlistId: Int):Int
 
     @Query("Select Count(*) from quizdetailentity where quizId=:quizId")
     suspend fun numberOfQuestions(quizId: Int):Int
@@ -23,8 +19,6 @@ interface QuizDao {
     @Query("Update Quiz set correctAnswers=:correctAnswers, wrongAnswers=:wrongAnswers, isCompleted=:isCompleted where id=:quizId")
     suspend fun modify(quizId:Int,correctAnswers:Int, wrongAnswers:Int, isCompleted:Boolean)
 
-    @Query("Select id from quiz where playlistId=:playlistId")
-    suspend fun getQuizId(playlistId: Int):Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSingleQuiz(quizDetailEntity: QuizDetailEntity):Long
@@ -34,5 +28,11 @@ interface QuizDao {
 
     @Query("Select * from quizdetailentity where quizId=:quizId")
     suspend fun fetchQuizQuestions(quizId:Int):List<QuizDetailEntity>
+
+    @Query("Select duration from quiz where id=:id")
+    suspend fun getDuration(id:Int):Int
+
+    @Query("Delete from quiz where id=:id")
+    suspend fun remove(id:Int)
 
 }

@@ -1,11 +1,13 @@
 package com.example.finalprojectufaz.ui.create_quiz
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -29,7 +31,10 @@ class CreateQuizFragment : Fragment() {
     private lateinit var binding: FragmentCreateQuizBinding
     private lateinit var mActivity:MainActivity
     private lateinit var playlistDao:PlaylistDao
+    private val adapter = PlaylistAdapter()
     private lateinit var quizDao: QuizDao
+    private var duration= 0
+    private var numberOfQuestion = 0
     private val pViewModel: PlaylistViewModel by viewModels { PlaylistFactory(playlistDao,quizDao) }
     private val qViewModel: QuizViewModel by viewModels { QuizFactory(quizDao,playlistDao) }
 
@@ -62,31 +67,62 @@ class CreateQuizFragment : Fragment() {
                 is Resource.Loading -> {}
             }
         })
+        binding.rgTimer.setOnCheckedChangeListener { group, checkedId ->
+            if (checkedId != -1) {
+                val selectedRadioButton = binding.root.findViewById<RadioButton>(checkedId)
+                val selectedText = selectedRadioButton.text.toString()
+                duration = selectedText.split(" ")[0].toInt()
+            }
+        }
 
+        binding.rgNumberQuestion.setOnCheckedChangeListener { group, checkedId ->
+            if(checkedId!=-1){
+                val selectedRadioButton = binding.root.findViewById<RadioButton>(checkedId)
+                numberOfQuestion = selectedRadioButton.text.toString().toInt()
+            }
+        }
+
+        createQuiz()
         pViewModel.getPlaylists()
     }
 
     private fun createQuiz(){
         binding.btnCreate.setOnClickListener {
+            val mapPlaylist = adapter.getSelected()
             val name = binding.edtQuizName.text.toString()
-            val duration = when (binding.rgTimer.checkedRadioButtonId) {
-                R.id.rbThirty -> 30
-                R.id.rbSixty -> 60
-                R.id.rbNinety -> 90
-                else -> 30
+
+            if(numberOfQuestion > mapPlaylist["count"] as Int){
+                Toast.makeText(requireContext(),"Not enough track in playlist(s)",Toast.LENGTH_SHORT).show()
             }
-            val numberOfQuestions = when(binding.rgNumberQuestion.checkedRadioButtonId){
-                R.id.rbThree -> 3
-                R.id.rbFive -> 5
-                R.id.rbSeven -> 7
-                else -> 3
+            else{
+                if(name.isNotEmpty() && duration!=0 && numberOfQuestion!=0){
+                    (mapPlaylist["selectedList"] as? MutableList<Int>)?.let { it1 ->
+                        qViewModel.createQuiz(QuizEntity(0,name,duration,numberOfQuestion),
+                            it1,numberOfQuestion
+                        )
+                    }
+                    qViewModel.success.observe(viewLifecycleOwner,{
+                        when(it){
+                            is Resource.Success -> {
+                                mActivity.hideBottomNav(false)
+                                findNavController().popBackStack()
+                            }
+                            is Resource.Loading -> { binding.progressBar.visibility = View.VISIBLE}
+                            is Resource.Error -> {}
+                        }
+                    })
+                }else{
+                    Toast.makeText(requireContext(),"Fill required inputs",Toast.LENGTH_SHORT).show()
+                }
             }
-//            quizDao.insertQuiz(QuizEntity(0,name,duration,numberOfQuestions))
+
+
+
+
         }
     }
 
     private fun setAdapter(playlists: List<PlaylistDTO>) {
-        val adapter = PlaylistAdapter()
         adapter.submitList( playlists.map { it.copy(isBottomSheet = true) })
         binding.rvPlaylists.layoutManager = GridLayoutManager(requireContext(),1)
         binding.rvPlaylists.adapter = adapter
@@ -100,4 +136,5 @@ class CreateQuizFragment : Fragment() {
             mActivity.hideBottomNav(false)
         }
     }
+
 }

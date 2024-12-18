@@ -8,10 +8,7 @@ import com.example.finalprojectufaz.data.local.playlist.PlaylistDao
 import com.example.finalprojectufaz.data.local.playlist.PlaylistEntity
 import com.example.finalprojectufaz.data.local.playlist.TrackEntity
 import com.example.finalprojectufaz.data.local.quiz.QuizDao
-import com.example.finalprojectufaz.data.local.quiz.QuizDetailEntity
-import com.example.finalprojectufaz.data.local.quiz.QuizEntity
 import com.example.finalprojectufaz.domain.core.Resource
-import com.example.finalprojectufaz.domain.nav.TrackNavModel
 import com.example.finalprojectufaz.domain.playlist.PlaylistDTO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,18 +26,13 @@ val quizDao: QuizDao):ViewModel() {
 
     fun insert(name:String){
         viewModelScope.launch(Dispatchers.IO) {
-           val id =  dao.addPlaylist(PlaylistEntity(0,name))
-           if(id!=-1L){
-               quizDao.insertQuiz(QuizEntity(0,id.toInt(),null,null,false))
-           }
+          dao.addPlaylist(PlaylistEntity(0,name))
+
         }
     }
 
     fun getPlaylists(){
-        if(!cachePlaylists.value.isNullOrEmpty()){
-            _playlists.postValue(Resource.Success(cachePlaylists.value!!))
-            return
-        }
+
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val list = dao.getPlaylists()
@@ -51,7 +43,6 @@ val quizDao: QuizDao):ViewModel() {
                         val plModel = PlaylistDTO(it.id,countPL,it.name)
                         pls.add(plModel)
                     }
-                    cachePlaylists.postValue(pls)
                     _playlists.postValue(Resource.Success(pls))
                 }else{
                     _playlists.postValue(Resource.Success(emptyList()))
@@ -87,20 +78,6 @@ val quizDao: QuizDao):ViewModel() {
         }
     }
 
-    fun addToQuiz(playlistIds: List<Int>,trackNavModel: TrackNavModel){
-        val answers = listOf(trackNavModel.title,trackNavModel.artist)
-        val questions = listOf("What is the name of the music?", "Who is the singer of the music")
-        val isAuthor = listOf(false,true)
 
-        viewModelScope.launch(Dispatchers.IO) {
-            playlistIds.forEach {pId->
-                val index = (0..1).random()
-                val quizId = quizDao.getQuizId(pId)
-                val entity = QuizDetailEntity(0,isAuthor[index],trackNavModel.preview,answers[index],quizId,questions[index])
-                quizDao.insertSingleQuiz(entity)
-            }
-
-        }
-    }
 
 }

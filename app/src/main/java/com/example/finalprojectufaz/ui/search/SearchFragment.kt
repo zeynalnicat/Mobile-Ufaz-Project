@@ -73,7 +73,7 @@ class SearchFragment : Fragment() {
             when(it){
                 ChipState.TRACK -> {
                     binding.chipTrack.chipBackgroundColor =
-                        ContextCompat.getColorStateList(requireContext(), R.color.white)
+                        ContextCompat.getColorStateList(requireContext(), R.color.transparent_white)
                     binding.chipAlbum.chipBackgroundColor =
                         ContextCompat.getColorStateList(requireContext(), R.color.primary)
                     viewModel.getTracks()
@@ -85,7 +85,7 @@ class SearchFragment : Fragment() {
                     binding.chipTrack.chipBackgroundColor =
                         ContextCompat.getColorStateList(requireContext(), R.color.primary)
                     binding.chipAlbum.chipBackgroundColor =
-                        ContextCompat.getColorStateList(requireContext(), R.color.white)
+                        ContextCompat.getColorStateList(requireContext(), R.color.transparent_white)
                     viewModel.getAlbums()
                     setSearch(ChipState.ALBUM)
                 }

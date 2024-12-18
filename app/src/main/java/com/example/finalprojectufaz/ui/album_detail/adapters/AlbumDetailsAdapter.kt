@@ -46,11 +46,19 @@ class AlbumDetailsAdapter(private val img:String="",private val action: (TrackNa
                 Glide.with(itemView)
                     .load(img)
                     .into(binding.imgTrack)
+
+                itemView.setOnClickListener {
+                    navTo(trck)
+                }
             }
             else{
                 Glide.with(itemView)
                     .load(track.img)
                     .into(binding.imgTrack)
+
+                itemView.setOnClickListener {
+                    navTo(TrackNavModel(track.id.toLong(),track.img,track.title,track.artist.name,track.preview,track.duration))
+                }
             }
 
 
@@ -58,9 +66,7 @@ class AlbumDetailsAdapter(private val img:String="",private val action: (TrackNa
                 action(trck)
             }
             binding.txtTrackName.text = track.title
-            itemView.setOnClickListener {
-                navTo(trck)
-            }
+
         }
 
     }

@@ -71,14 +71,13 @@ class SinglePlaylistFragment : Fragment() {
         })
 
         viewModel.fetchTracks(playlistId!!)
-        viewModel.quizExist(playlistId!!)
     }
 
     private fun setAdapter(data: List<TrackResponseModel>) {
         val trackModel = data.map { Data(artist = Artist(id = it.artist?.id ?:0, name = it.artist?.name?:""), duration = it.duration, id = it.id.toInt()
             , preview = it.preview, title = it.title, type = it.type, img = it.album.cover) }
         val adapter = AlbumDetailsAdapter(action = {track -> handleBottomSheet(track)})
-        adapter.setNavFunction { SinglePlaylistFragmentDirections.actionSinglePlaylistToDetailsFragment(it) }
+        adapter.setNavFunction { findNavController().navigate(SinglePlaylistFragmentDirections.actionSinglePlaylistToDetailsFragment(it)) }
         adapter.submitList(trackModel)
         binding.recyclerView.layoutManager = GridLayoutManager(requireContext(),1)
         binding.recyclerView.adapter = adapter
@@ -98,7 +97,6 @@ class SinglePlaylistFragment : Fragment() {
 
         view.viewRemove.setOnClickListener {
             viewModel.removeTrack(trackNavModel.id.toInt(),playlistId!!.toInt())
-            viewModel.fetchTracks(playlistId!!)
             dialog.dismiss()
 
         }

@@ -13,6 +13,7 @@ import com.example.finalprojectufaz.domain.playlist.PlaylistDTO
 class PlaylistAdapter(private val nav: (PlaylistDTO)->Unit = {},private val handleBottomSheet: (Int)->Unit ={}): RecyclerView.Adapter<PlaylistAdapter.ViewHolder>() {
 
     private val selectedPlaylist = mutableListOf<Int>()
+    private var count = 0
 
     private val callBack = object: DiffUtil.ItemCallback<PlaylistDTO>(){
         override fun areItemsTheSame(oldItem: PlaylistDTO, newItem: PlaylistDTO): Boolean {
@@ -50,8 +51,10 @@ class PlaylistAdapter(private val nav: (PlaylistDTO)->Unit = {},private val hand
                     item.isSelected = isChecked
                     if(isChecked){
                         selectedPlaylist.add(item.id)
+                        count+=item.total
                     }else{
                         selectedPlaylist.remove(item.id)
+                        count-=item.total
                     }
                 }
 
@@ -64,12 +67,12 @@ class PlaylistAdapter(private val nav: (PlaylistDTO)->Unit = {},private val hand
                     itemView.animate()
                         .scaleX(0.8f)
                         .scaleY(0.8f)
-                        .setDuration(300)
+                        .setDuration(200)
                         .withEndAction{
                             itemView.animate()
                                 .scaleX(1f)
                                 .scaleY(1f)
-                                .setDuration(300)
+                                .setDuration(200)
                                 .start()
                         }
                         .start()
@@ -87,7 +90,7 @@ class PlaylistAdapter(private val nav: (PlaylistDTO)->Unit = {},private val hand
         diffUtil.submitList(playlists)
     }
 
-    fun getSelected():List<Int>{
-        return selectedPlaylist
+    fun getSelected():Map<String,Any>{
+        return mapOf("selectedList" to selectedPlaylist, "count" to count)
     }
 }

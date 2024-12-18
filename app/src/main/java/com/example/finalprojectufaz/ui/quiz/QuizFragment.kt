@@ -8,15 +8,22 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.finalprojectufaz.R
 import com.example.finalprojectufaz.data.local.RoomDB
 import com.example.finalprojectufaz.data.local.playlist.PlaylistDao
 import com.example.finalprojectufaz.data.local.quiz.QuizDao
+import com.example.finalprojectufaz.databinding.BottomSheetPlaylistBinding
 import com.example.finalprojectufaz.databinding.FragmentQuizBinding
+import com.example.finalprojectufaz.databinding.LayoutBottomSheetBinding
 import com.example.finalprojectufaz.domain.core.Resource
+import com.example.finalprojectufaz.domain.nav.TrackNavModel
+import com.example.finalprojectufaz.domain.playlist.PlaylistDTO
 import com.example.finalprojectufaz.domain.quiz.QuizDTO
+import com.example.finalprojectufaz.ui.playlist.adapters.PlaylistAdapter
 import com.example.finalprojectufaz.ui.quiz.adapter.QuizAdapter
 import com.example.finalprojectufaz.ui.quiz.factory.QuizFactory
 import com.example.finalprojectufaz.ui.quiz.viewmodel.QuizViewModel
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 
 class QuizFragment : Fragment(),QuizAdapter.ActionCallBack {
@@ -34,6 +41,7 @@ class QuizFragment : Fragment(),QuizAdapter.ActionCallBack {
         val roomDb = RoomDB.accessDB(requireContext())!!
         quizDao = roomDb.quizDao()
         playlistDao = roomDb.playlistDao()
+        setNavigation()
         return binding.root
     }
 
@@ -52,6 +60,12 @@ class QuizFragment : Fragment(),QuizAdapter.ActionCallBack {
         viewModel.fetchQuizzes()
     }
 
+    private fun setNavigation(){
+        binding.btnAdd.setOnClickListener {
+            findNavController().navigate(R.id.action_quizFragment_to_createQuizFragment)
+        }
+    }
+
     private fun setAdapter(quizzes: List<QuizDTO>) {
          val adapter = QuizAdapter(this)
          adapter.submitList(quizzes)
@@ -63,6 +77,21 @@ class QuizFragment : Fragment(),QuizAdapter.ActionCallBack {
         findNavController().navigate(QuizFragmentDirections.actionQuizFragmentToSingleQuiz(id))
     }
 
+    override fun handleBottomSheet(id: Int) {
+                val dialog = BottomSheetDialog(requireContext())
+                val view = BottomSheetPlaylistBinding.inflate(layoutInflater)
+                view.textView.text = "Remove quiz"
+                dialog.setCancelable(true)
+                dialog.setContentView(view.root)
+                view.viewRemove.setOnClickListener {
+                    viewModel.removeQuiz(id)
+                    dialog.dismiss()
+                }
 
 
-}
+
+                dialog.show()
+            }
+
+    }
+

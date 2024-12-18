@@ -21,6 +21,7 @@ class SingleQuizViewModel(private val quizDao: QuizDao):ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val questionsEntity = quizDao.fetchQuizQuestions(id)
+                val duration = quizDao.getDuration(id)
                 val previews = List(questionsEntity.size){index->
                     questionsEntity[index].preview
                 }
@@ -41,7 +42,7 @@ class SingleQuizViewModel(private val quizDao: QuizDao):ViewModel() {
                 }
 
 
-                val questionsModel = QuizQuestionsModel(options,answers,previews,questions)
+                val questionsModel = QuizQuestionsModel(options,answers,previews,questions,duration)
                 _questions.postValue(questionsModel)
             }catch (e:Exception){
                  Log.e("ERR",e.message.toString())

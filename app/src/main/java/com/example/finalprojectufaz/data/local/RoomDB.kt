@@ -11,7 +11,7 @@ import com.example.finalprojectufaz.data.local.quiz.QuizDao
 import com.example.finalprojectufaz.data.local.quiz.QuizDetailEntity
 import com.example.finalprojectufaz.data.local.quiz.QuizEntity
 
-@Database(entities = [PlaylistEntity::class, TrackEntity::class , QuizEntity::class,QuizDetailEntity::class], version = 3)
+@Database(entities = [PlaylistEntity::class, TrackEntity::class , QuizEntity::class,QuizDetailEntity::class], version = 5)
 abstract class RoomDB:RoomDatabase() {
 
     abstract fun playlistDao(): PlaylistDao

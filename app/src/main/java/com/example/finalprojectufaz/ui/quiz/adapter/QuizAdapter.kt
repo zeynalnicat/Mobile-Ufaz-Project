@@ -16,6 +16,7 @@ class QuizAdapter(private val action:ActionCallBack):RecyclerView.Adapter<QuizAd
 
     interface ActionCallBack{
         fun nav(id:Int)
+        fun handleBottomSheet(id:Int)
     }
     private val callBack = object: DiffUtil.ItemCallback<QuizDTO>(){
         override fun areItemsTheSame(oldItem: QuizDTO, newItem: QuizDTO): Boolean {
@@ -45,7 +46,7 @@ class QuizAdapter(private val action:ActionCallBack):RecyclerView.Adapter<QuizAd
     inner class ViewHolder(private val binding:ItemQuizListBinding):RecyclerView.ViewHolder(binding.root){
         fun bind(quiz: QuizDTO){
             binding.txtQuizName.text = "Quiz #${layoutPosition}"
-            binding.txtPlaylistName.text = quiz.playlistName
+            binding.txtPlaylistName.text = quiz.name
             binding.txtCount.text = "${quiz.numberOfQuestions} Questions"
             if(quiz.isCompleted==null || !quiz.isCompleted){
                 binding.txtCompletion.visibility = View.GONE
@@ -62,6 +63,22 @@ class QuizAdapter(private val action:ActionCallBack):RecyclerView.Adapter<QuizAd
 
             itemView.setOnClickListener {
                 action.nav(quiz.id)
+            }
+
+            itemView.setOnLongClickListener {
+                itemView.animate()
+                    .scaleX(0.8f)
+                    .scaleY(0.8f)
+                    .setDuration(200)
+                    .withEndAction {
+                        itemView.animate()
+                            .scaleX(1f)
+                            .scaleY(1f)
+                            .setDuration(200)
+                            .start()
+                    }.start()
+                action.handleBottomSheet(quiz.id)
+                true
             }
 
         }

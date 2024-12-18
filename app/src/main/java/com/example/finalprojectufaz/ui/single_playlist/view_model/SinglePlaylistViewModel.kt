@@ -25,19 +25,6 @@ class SinglePlaylistViewModel(private val dao:PlaylistDao,private val quizDao: Q
     val tracks : LiveData<Resource<List<TrackResponseModel>>> get()=_tracks
 
 
-    fun quizExist(playlistId: Int){
-        viewModelScope.launch(Dispatchers.IO) {
-            val count = quizDao.count(playlistId)
-
-            if(count>0){
-
-            }
-            else{
-                val entity = QuizEntity(0,playlistId,null,null,false)
-                quizDao.insertQuiz(entity)
-            }
-        }
-    }
 
 
 

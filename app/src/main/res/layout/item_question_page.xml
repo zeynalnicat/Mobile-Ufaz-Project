@@ -36,7 +36,7 @@
             android:layout_height="0dp"
             android:background="@drawable/bg_quiz_view"
             android:translationZ="-10dp"
-            app:layout_constraintHeight_percent="0.4"
+            app:layout_constraintHeight_percent="0.34"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -49,7 +49,7 @@
             android:textSize="10sp"
             android:textAllCaps="false"
             android:layout_marginTop="16dp"
-            android:background="@drawable/btn_primary_background"
+            android:background="@drawable/btn_secondary_background"
             android:text="Next"
             android:textColor="@color/white"
             app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
@@ -65,7 +65,7 @@
             app:layout_constraintEnd_toStartOf="@+id/rightGuideline"
             app:layout_constraintStart_toStartOf="@+id/leftGuideline"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.34">
+            app:layout_constraintVertical_bias="0.25">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -73,12 +73,12 @@
 
                 <TextView
                     android:id="@+id/txtQuestionTitle"
+                    style="@style/BoldText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
                     android:text="Question 2/10"
                     android:textColor="@color/black"
-                    style="@style/BoldText"
-                    android:layout_marginTop="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -86,11 +86,11 @@
                 <androidx.cardview.widget.CardView
                     android:id="@+id/previewListener"
                     android:layout_width="0dp"
-                    app:layout_constraintTop_toBottomOf="@id/txtQuestionTitle"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_height="30dp"
                     android:layout_marginHorizontal="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:layout_height="30dp" >
+                    app:layout_constraintTop_toBottomOf="@id/txtQuestionTitle">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -100,10 +100,10 @@
                             android:id="@+id/btnPlay"
                             android:layout_width="16dp"
                             android:layout_height="16dp"
-                            app:layout_constraintTop_toTopOf="parent"
+                            android:src="@drawable/icon_play"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            android:src="@drawable/icon_play"
+                            app:layout_constraintTop_toTopOf="parent"
                             app:tint="@color/black"
                             tools:layout_editor_absoluteX="14dp" />
 
@@ -111,12 +111,13 @@
                             android:id="@+id/progressPreview"
                             style="?android:attr/progressBarStyleHorizontal"
                             android:layout_width="0dp"
+                            android:tickMarkTint="@color/quizGreen"
                             android:layout_height="wrap_content"
-                            app:layout_constraintTop_toTopOf="parent"
                             android:layout_marginHorizontal="8dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/btnPlay" />
+                            app:layout_constraintStart_toEndOf="@+id/btnPlay"
+                            app:layout_constraintTop_toTopOf="parent" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -124,12 +125,12 @@
                     android:id="@+id/txtQuestion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/previewListener"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_margin = "16dp"
+                    android:layout_margin="16dp"
                     android:paddingBottom="12dp"
-                    android:text="Who sings the song? " />
+                    android:text="Who sings the song? "
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/previewListener" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
@@ -153,7 +154,7 @@
             android:layout_height="32dp"
             android:textSize="10sp"
             android:textAllCaps="false"
-            android:background="@drawable/btn_primary_background"
+            android:background="@drawable/btn_secondary_background"
             android:text="Previous"
             android:textColor="@color/white"
             app:layout_constraintStart_toStartOf="@+id/leftGuideline"
