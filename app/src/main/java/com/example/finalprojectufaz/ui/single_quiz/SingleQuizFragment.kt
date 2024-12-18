@@ -13,6 +13,7 @@ import com.example.finalprojectufaz.MainActivity
 import com.example.finalprojectufaz.data.local.RoomDB
 import com.example.finalprojectufaz.data.local.quiz.QuizDao
 import com.example.finalprojectufaz.databinding.FragmentSingleQuizBinding
+import com.example.finalprojectufaz.domain.mediaplayer.MusicPlayer
 import com.example.finalprojectufaz.ui.single_quiz.adapter.QuizPagerAdapter
 import com.example.finalprojectufaz.ui.single_quiz.factory.SingleQuizFactory
 import com.example.finalprojectufaz.ui.single_quiz.viewmodel.SingleQuizViewModel
@@ -60,6 +61,7 @@ class SingleQuizFragment : Fragment(),QuizPagerAdapter.ActionCallBac {
                       override fun onFinish() {
                           binding.circularProgressBar.progress = 0
                           binding.timerTextView.text = "0"
+                          MusicPlayer.getInstance().stopMusic()
                           mActivity.hideBottomNav(false)
                           if(isAdded){
                               findNavController().navigate(
