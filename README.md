@@ -1,19 +1,19 @@
 # MusicalQuiz - Music Exploration and Quiz
 
 ## Overview
-MusicalQuiz is a feature-rich mobile application designed to make music discovery and interaction engaging and fun. Using the Deezer API, the app offers functionalities such as searching for music, creating playlists, and participating in quizzes. Below is the detailed report of our project.
+MusicApp is a feature-rich mobile application designed to make music discovery and interaction engaging and fun. Using the Deezer API, the app offers functionalities such as searching for music, creating playlists, and participating in quizzes. Below is the detailed report of our project.
 
 ---
 
 ## Functionalities
-MusicalQuiz provides the following features:
+MusicApp provides the following features:
 
 ### Search Screen
 - **Music Search:** Search for tracks or albums using a simple search bar.
 - **Interactive Results:** Display search results in a grid layout showing album covers, titles, and artist names.
 - **Actions on Results:**
   - Click to view detailed information.
-  - Long click to add the item to the current playlist.
+  - Click options to add the item to the desired playlist ( you can choose which playlist you want to add).
 
 ### Details Screen
 - View detailed information about a selected track or album.
@@ -29,7 +29,7 @@ MusicalQuiz provides the following features:
   - View quiz details, including associated playlist and quiz name.
   - Start quizzes with a single button.
 - **Quiz Gameplay:**
-  - Randomly generated or pre-defined questions.
+  - Randomly generated questions.
   - Game modes:
     - **Multiple Choice:** Select the correct answer from a list.
     - **Open-Ended:** Enter the correct answer manually.
@@ -48,7 +48,7 @@ MusicalQuiz provides the following features:
 ## Technical Section
 
 ### App Architecture
-MusicalQuiz is built using the **MVVM (Model-View-ViewModel)** architecture for efficient data handling and separation of concerns.
+MusicApp is built using the **MVVM (Model-View-ViewModel)** architecture for efficient data handling and separation of concerns.
 
 #### Architecture Diagram
 ```plaintext
@@ -69,9 +69,8 @@ MusicalQuiz is built using the **MVVM (Model-View-ViewModel)** architecture for 
 
 ## Technical Problems
 While the project is functional, a few technical challenges remain unresolved:
-1. **Offline Mode:** The caching system for offline access is only partially implemented.
-2. **Advanced Quiz Features:** Additional game modes like "Fill in the Blanks" and configurable time limits are still under development.
-3. **Configuration Changes:** Minor UI glitches may occur during rapid orientation changes or app restarts.
+1. **Offline Mode:** The caching system for offline access is not implemented.
+
 
 ---
 
