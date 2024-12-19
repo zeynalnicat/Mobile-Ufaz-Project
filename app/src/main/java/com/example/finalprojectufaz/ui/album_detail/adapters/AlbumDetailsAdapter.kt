@@ -53,7 +53,7 @@ class AlbumDetailsAdapter(private val img:String="",private val action: (TrackNa
             }
             else{
                 Glide.with(itemView)
-                    .load(track.img)
+                    .load(track.artist.picture)
                     .into(binding.imgTrack)
 
                 itemView.setOnClickListener {

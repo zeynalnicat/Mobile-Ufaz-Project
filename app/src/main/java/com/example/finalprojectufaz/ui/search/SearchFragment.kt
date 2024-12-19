@@ -79,6 +79,10 @@ class SearchFragment : Fragment() {
                     viewModel.getTracks()
                     setSearch(ChipState.TRACK)
 
+                    if(binding.edtSearch.text.toString().isNotEmpty()){
+                        viewModel.search(binding.edtSearch.text.toString(),ChipState.TRACK)
+                    }
+
                 }
 
                 ChipState.ALBUM -> {
@@ -88,6 +92,9 @@ class SearchFragment : Fragment() {
                         ContextCompat.getColorStateList(requireContext(), R.color.transparent_white)
                     viewModel.getAlbums()
                     setSearch(ChipState.ALBUM)
+                    if(binding.edtSearch.text.toString().isNotEmpty()){
+                        viewModel.search(binding.edtSearch.text.toString(),ChipState.ALBUM)
+                    }
                 }
             }
         })

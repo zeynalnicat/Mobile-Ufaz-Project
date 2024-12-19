@@ -54,7 +54,7 @@ class TracksListAdapter:RecyclerView.Adapter<TracksListAdapter.ViewHolder>() {
                     navTo(trck)
                 }
                 Glide.with(itemView)
-                    .load(item.album?.cover)
+                    .load(item.artist?.picture)
                     .into(binding.img)
             }
             else if (item is AlbumResponseModel){

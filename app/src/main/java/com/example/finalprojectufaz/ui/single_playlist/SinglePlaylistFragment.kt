@@ -74,7 +74,7 @@ class SinglePlaylistFragment : Fragment() {
     }
 
     private fun setAdapter(data: List<TrackResponseModel>) {
-        val trackModel = data.map { Data(artist = Artist(id = it.artist?.id ?:0, name = it.artist?.name?:""), duration = it.duration, id = it.id.toInt()
+        val trackModel = data.map { Data(artist = Artist(id = it.artist?.id ?:0, name = it.artist?.name?:"", picture = it.artist?.picture?:""), duration = it.duration, id = it.id.toInt()
             , preview = it.preview, title = it.title, type = it.type, img = it.album.cover) }
         val adapter = AlbumDetailsAdapter(action = {track -> handleBottomSheet(track)})
         adapter.setNavFunction { findNavController().navigate(SinglePlaylistFragmentDirections.actionSinglePlaylistToDetailsFragment(it)) }

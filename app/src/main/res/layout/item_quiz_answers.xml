@@ -14,6 +14,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="example"
+        android:maxLines="2"
+        android:ellipsize="marquee"
         android:textColor="@color/white"
         android:layout_marginHorizontal="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
