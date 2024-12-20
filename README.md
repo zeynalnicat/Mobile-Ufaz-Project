@@ -14,34 +14,42 @@ MusicApp provides the following features:
 - **Actions on Results:**
   - Click to view detailed information.
   - Click options to add the item to the desired playlist ( you can choose which playlist you want to add).
+  <img width="362" alt="image" src="https://github.com/user-attachments/assets/0143a4c5-5a30-41fd-82e8-6d28ab91153e" />
 
 ### Details Screen
 - View detailed information about a selected track or album.
 - Play a short preview of a track using the provided button.
+  <img width="366" alt="image (1)" src="https://github.com/user-attachments/assets/660e2369-dd1e-4ea7-87df-d218826c78c5" />
+  <img width="365" alt="image (5)" src="https://github.com/user-attachments/assets/254d263a-5199-4eb8-b120-e2ade4d91642" />
+
+
 
 ### Playlist Screen
 - **Playlist Management:** Create, view, and manage personalized playlists.
 - **Track Organization:** Add tracks to playlists to curate a customized music experience.
+  <img width="368" alt="image (4)" src="https://github.com/user-attachments/assets/a40521ed-9c11-4ae9-a9bf-f046bafb9525" />
+
 
 ### Quiz Screen
 - **Quiz Management:**
   - Create and manage quizzes linked to playlists.
   - View quiz details, including associated playlist and quiz name.
   - Start quizzes with a single button.
+    <img width="364" alt="image (3)" src="https://github.com/user-attachments/assets/17d9794b-ec49-412d-b0f8-1fa2ea45207a" />
+
 - **Quiz Gameplay:**
   - Randomly generated questions.
   - Game modes:
     - **Multiple Choice:** Select the correct answer from a list.
     - **Open-Ended:** Enter the correct answer manually.
   - Play track previews for each question.
+    <img width="370" alt="image (2)" src="https://github.com/user-attachments/assets/3524e983-1679-425d-82d4-c66f79c73433" />
+
 
 ### Local Database
 - Use Room for storing playlists and quizzes locally to ensure data persistence.
+  <img width="685" alt="image (6)" src="https://github.com/user-attachments/assets/b224d24c-68ce-4d81-9ff6-effd38ed4c05" />
 
-#### Screenshots
-![Search Screen](path/to/search_screen_screenshot.png)
-![Playlist Screen](path/to/playlist_screen_screenshot.png)
-![Quiz Screen](path/to/quiz_screen_screenshot.png)
 
 ---
 
@@ -54,8 +62,8 @@ MusicApp is built using the **MVVM (Model-View-ViewModel)** architecture for eff
 ```plaintext
 +----------------+       +----------------+       +----------------+
 |     View       |  <--  |   ViewModel    |  -->  |     Model      |
-| (Fragments, UI)|       |  (LiveData,    |       | (Room, Deezer  |
-|                |       |  Repository)   |       | API Access)    |
+| (Fragments, UI)|       |  (LiveData,)   |       | (Room, Deezer  |
+|                |       |                |       | API Access)    |
 +----------------+       +----------------+       +----------------+
 ```
 
