@@ -19,9 +19,7 @@ MusicApp provides the following features:
 ### Details Screen
 - View detailed information about a selected track or album.
 - Play a short preview of a track using the provided button.
-  <img width="366" alt="image (1)" src="https://github.com/user-attachments/assets/660e2369-dd1e-4ea7-87df-d218826c78c5" />
-  <img width="365" alt="image (5)" src="https://github.com/user-attachments/assets/254d263a-5199-4eb8-b120-e2ade4d91642" />
-
+  <img width="366" alt="image (1)" src="https://github.com/user-attachments/assets/660e2369-dd1e-4ea7-87df-d218826c78c5" /> <img width="365" alt="image (5)" src="https://github.com/user-attachments/assets/254d263a-5199-4eb8-b120-e2ade4d91642" />
 
 
 ### Playlist Screen
